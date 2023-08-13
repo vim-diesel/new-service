@@ -19,6 +19,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"github.com/vim-diesel/new-service/app/handlers"
+	"github.com/vim-diesel/new-service/business/web/v1/debug"
 )
 
 var build = "develop"
@@ -102,6 +103,17 @@ func run(ctx context.Context, log *slog.Logger) error {
 	defer func() {
 		log.InfoContext(ctx, "shutdown", "status", "stopping database support")
 		db.Close()
+	}()
+
+	// -------------------------------------------------------------------------
+	// Start Debug Service
+
+	log.InfoContext(ctx, "startup", "status", "debug v1 router started", "host", cfg.Web.DebugHost)
+
+	go func() {
+		if err := http.ListenAndServe(cfg.Web.DebugHost, debug.StandardLibraryMux()); err != nil {
+			log.ErrorContext(ctx, "shutdown", "status", "debug v1 router closed", "host", cfg.Web.DebugHost, "ERROR", err)
+		}
 	}()
 
 	// -------------------------------------------------------------------------
