@@ -17,6 +17,7 @@ import (
 	"github.com/ardanlabs/conf/v3"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
+	"github.com/joho/godotenv"
 	"github.com/vim-diesel/new-service/app/handlers"
 )
 
@@ -40,6 +41,12 @@ func run(ctx context.Context, log *slog.Logger) error {
 
 	// -------------------------------------------------------------------------
 	// Configuration
+
+	// Load in the `.env` file
+	err := godotenv.Load()
+	if err != nil {
+		return fmt.Errorf("loading .env: %w", err)
+	}
 
 	dataSourceName := os.Getenv("DSN")
 
@@ -83,14 +90,13 @@ func run(ctx context.Context, log *slog.Logger) error {
 
 	log.InfoContext(ctx, "startup", "status", "initializing database support")
 
-	log.InfoCtx(ctx, "initializing data connection...")
 	db, err := sqlx.Open("mysql", dataSourceName)
 	if err != nil {
 		return fmt.Errorf("failed to initialize a connection to planetscale: %w", err)
 	}
 
 	if err := db.Ping(); err != nil {
-		return fmt.Errorf("failed to ping planetscale %w", err)
+		return fmt.Errorf("failed to ping planetscale: %w", err)
 	}
 
 	defer func() {
