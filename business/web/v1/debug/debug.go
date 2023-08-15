@@ -29,7 +29,7 @@ func StandardLibraryMux() *http.ServeMux {
 // debug application routes for the service. This bypassing the use of the
 // DefaultServerMux. Using the DefaultServerMux would be a security risk since
 // a dependency could inject a handler into our service without us knowing it.
-// func Mux(build string, log *zap.SugaredLogger, db *sqlx.DB) http.Handler {
+// func Mux(build string, log *slog.Logger, db *sqlx.DB) http.Handler {
 // 	mux := StandardLibraryMux()
 
 // 	cgh := checkgrp.Handlers{

@@ -49,7 +49,7 @@ func run(ctx context.Context, log *slog.Logger) error {
 		return fmt.Errorf("loading .env: %w", err)
 	}
 
-	dataSourceName := os.Getenv("DSN")
+	dataSourceName := os.Getenv("CONNSTR")
 
 	cfg := struct {
 		conf.Version
