@@ -49,7 +49,7 @@ func run(ctx context.Context, log *slog.Logger) error {
 		return fmt.Errorf("loading .env: %w", err)
 	}
 
-	dataSourceName := os.Getenv("DSN")
+	dsn := os.Getenv("DSN")
 
 	cfg := struct {
 		conf.Version
@@ -91,7 +91,7 @@ func run(ctx context.Context, log *slog.Logger) error {
 
 	log.InfoContext(ctx, "startup", "status", "initializing database support")
 
-	db, err := database.Open(dataSourceName)
+	db, err := database.Open(dsn)
 	if err != nil {
 		return fmt.Errorf("failed to initialize a connection to planetscale: %w", err)
 	}
