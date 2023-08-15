@@ -16,9 +16,9 @@ import (
 
 	"github.com/ardanlabs/conf/v3"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	"github.com/vim-diesel/new-service/app/handlers"
+	"github.com/vim-diesel/new-service/business/sys/database"
 	"github.com/vim-diesel/new-service/business/web/v1/debug"
 )
 
@@ -91,13 +91,17 @@ func run(ctx context.Context, log *slog.Logger) error {
 
 	log.InfoContext(ctx, "startup", "status", "initializing database support")
 
-	db, err := sqlx.Open("mysql", dataSourceName)
+	db, err := database.Open(dataSourceName)
 	if err != nil {
 		return fmt.Errorf("failed to initialize a connection to planetscale: %w", err)
 	}
 
-	if err := db.Ping(); err != nil {
-		return fmt.Errorf("failed to ping planetscale: %w", err)
+	// If we need to, we can increase the deadline here. But if it starts taking
+	// over 2s we should really reconsider Planetscale as a solution.
+	pingDeadline := time.Duration(1500 * time.Millisecond)
+
+	if err := database.StatusCheck(ctx, db, pingDeadline); err != nil {
+		return fmt.Errorf("database statuscheck: %w", err)
 	}
 
 	defer func() {
