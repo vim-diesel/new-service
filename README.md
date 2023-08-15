@@ -45,7 +45,9 @@ This maintaining of strict firewalls between APIs helps to avoid cascading break
 
 ## App layers
 
-![Is our app an ogre?](https://media.tenor.com/TXJmqbUeyO8AAAAC/shrek-ogres-have-layers.gif)
+
+[![Watch the video](https://img.youtube.com/vi/-FtCTW2rVFM/hqdefault.jpg)](https://www.youtube.com/embed/-FtCTW2rVFM)
+
 
 Our code is organized in layers. The lower in layer you are the stricter the policies are.
 
@@ -60,3 +62,5 @@ Migrations are done using [ArdanLabs/darwin](https://github.com/ardanlabs/darwin
 Sqlx is our chosen database management package, and pgx is our chosen driver.
 
 ### Foundation layer
+
+Here is where the strictest policies are set. There is no logging at this level, so that future developers can use a logger of their choice. So any packages that use a logger must be built in another layer. 
