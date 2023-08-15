@@ -97,8 +97,8 @@ func run(ctx context.Context, log *slog.Logger) error {
 	}
 
 	// If we need to, we can increase the deadline here. But if it starts taking
-	// over 2s we should really reconsider Planetscale as a solution.
-	pingDeadline := time.Duration(1500 * time.Millisecond)
+	// over 2s we should really reconsider Neon.tech as a solution.
+	pingDeadline := time.Duration(2000 * time.Millisecond)
 
 	if err := database.StatusCheck(ctx, db, pingDeadline); err != nil {
 		return fmt.Errorf("database statuscheck: %w", err)
