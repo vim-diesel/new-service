@@ -18,7 +18,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
 	"github.com/vim-diesel/new-service/app/handlers"
-	"github.com/vim-diesel/new-service/business/sys/database"
+	"github.com/vim-diesel/new-service/business/sys/database/pgx"
 	"github.com/vim-diesel/new-service/business/web/v1/debug"
 )
 
@@ -49,7 +49,7 @@ func run(ctx context.Context, log *slog.Logger) error {
 		return fmt.Errorf("loading .env: %w", err)
 	}
 
-	dataSourceName := os.Getenv("CONNSTR")
+	dataSourceName := os.Getenv("DSN")
 
 	cfg := struct {
 		conf.Version
