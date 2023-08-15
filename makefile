@@ -10,3 +10,6 @@ test-endpoint-local:
 
 query-local:
 	@curl -s "http://localhost:3000/users?page=1&rows=2&orderBy=name,ASC" | jq
+
+run-admin:
+	go run app/tooling/admin/main.go
