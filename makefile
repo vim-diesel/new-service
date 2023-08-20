@@ -8,13 +8,13 @@ tidy:
 test-endpoint-local:
 	curl -il localhost:3000/test
 
-test-flyio:
+test-endpoint:
 	curl -il https://new-service.fly.dev/test
 
 query-local:
 	@curl -s "http://localhost:3000/users?page=1&rows=2&orderBy=name,ASC" | jq
 
-query-flyio:
+query:
 	@curl -s "https://new-service.fly.dev/users?page=1&rows=2&orderBy=name,ASC" | jq
 
 run-admin:
@@ -25,3 +25,6 @@ metrics-view:
 
 load:
 	hey -m GET -c 100 -n 10000 https://new-service.fly.dev/users?page=1&rows=2
+
+load-small:
+	hey -m GET -c 25 -n 10000 https://new-service.fly.dev/users?page=1&rows=2
