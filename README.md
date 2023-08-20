@@ -194,12 +194,19 @@ Sqlx is our abstraction layer, and pgx is our chosen driver.
 ## Configuration
 
   ○ Only place config allowed to be read from is main.go
+
   ○ All configuration should have a default value that at bare minimum works in dev environment
+
    § Cloned repo should run on its own (unless they need a key, which should be clear where they go for a key and where to store it)
+
   ○ Service should allow for --help
+
    § Operator can see all configurable values, their default values, and how to override defaults
+
    § Any config should be overridable by Env variable or commandline flags
+
   ○ when app starts up, we should dump config we are using into the logs, and have ability to hide/mask any config that needs to maintain privacy
+  
    § Hiding credentials from logs is crucial
 
 - ArdanLabs conf/v3 package does all this for us.
