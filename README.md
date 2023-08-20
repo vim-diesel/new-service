@@ -201,12 +201,12 @@ Sqlx is our abstraction layer, and pgx is our chosen driver.
 
   ○ Service should allow for --help
 
-   § Operator can see all configurable values, their default values, and how to override defaults
+     § Operator can see all configurable values, their default values, and how to override defaults
 
    § Any config should be overridable by Env variable or commandline flags
 
   ○ when app starts up, we should dump config we are using into the logs, and have ability to hide/mask any config that needs to maintain privacy
-  
+
    § Hiding credentials from logs is crucial
 
 - ArdanLabs conf/v3 package does all this for us.
