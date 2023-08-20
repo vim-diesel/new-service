@@ -9,11 +9,12 @@ import (
 	"strings"
 	"time"
 
+	"log/slog"
+
 	"github.com/jackc/pgx/v5/pgconn"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
 	"github.com/vim-diesel/new-service/foundation/web"
-	"golang.org/x/exp/slog"
 )
 
 const (

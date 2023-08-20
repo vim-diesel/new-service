@@ -12,13 +12,14 @@ import (
 	"syscall"
 	"time"
 
-	"golang.org/x/exp/slog"
+	"log/slog"
 
 	"github.com/ardanlabs/conf/v3"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/joho/godotenv"
+
+	// "github.com/joho/godotenv"
 	"github.com/vim-diesel/new-service/app/handlers"
-	"github.com/vim-diesel/new-service/business/sys/database/pgx"
+	database "github.com/vim-diesel/new-service/business/sys/database/pgx"
 	"github.com/vim-diesel/new-service/business/web/v1/debug"
 )
 
@@ -44,10 +45,10 @@ func run(ctx context.Context, log *slog.Logger) error {
 	// Configuration
 
 	// Load in the `.env` file
-	err := godotenv.Load()
-	if err != nil {
-		return fmt.Errorf("loading .env: %w", err)
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	return fmt.Errorf("godotenv: %w", err)
+	// }
 
 	dsn := os.Getenv("DSN")
 
@@ -93,11 +94,11 @@ func run(ctx context.Context, log *slog.Logger) error {
 
 	db, err := database.Open(dsn)
 	if err != nil {
-		return fmt.Errorf("failed to initialize a connection to planetscale: %w", err)
+		return fmt.Errorf("failed to initialize a connection to database: %w", err)
 	}
 
-	// If we need to, we can increase the deadline here. But if it starts taking
-	// over 2s we should really reconsider Neon.tech as a solution.
+	// If we need to, we can increase the deadline here. Is quite slow, because
+	// This is a serverless solution, so cold starts are a thing.
 	pingDeadline := time.Duration(5 * time.Second)
 
 	if err := database.StatusCheck(ctx, db, pingDeadline); err != nil {

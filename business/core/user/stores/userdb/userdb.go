@@ -10,13 +10,14 @@ import (
 	"fmt"
 	"net/mail"
 
+	"log/slog"
+
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/vim-diesel/new-service/business/core/user"
 	"github.com/vim-diesel/new-service/business/data/order"
 	database "github.com/vim-diesel/new-service/business/sys/database/pgx"
 	"github.com/vim-diesel/new-service/business/sys/database/pgx/dbarray"
-	"golang.org/x/exp/slog"
 )
 
 // Store manages the set of APIs for user database access.

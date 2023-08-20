@@ -6,8 +6,9 @@ import (
 	"net/http"
 	"time"
 
+	"log/slog"
+
 	"github.com/vim-diesel/new-service/foundation/web"
-	"golang.org/x/exp/slog"
 )
 
 func Logger(log *slog.Logger) web.Middleware {

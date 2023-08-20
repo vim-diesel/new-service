@@ -4,8 +4,10 @@ import (
 	"context"
 	"net/http"
 
+	"log/slog"
+
 	"github.com/vim-diesel/new-service/business/sys/validate"
-	"golang.org/x/exp/slog"
+
 	// "github.com/vim-diesel/new-service/business/web/auth"
 	v1 "github.com/vim-diesel/new-service/business/web/v1"
 	"github.com/vim-diesel/new-service/foundation/web"

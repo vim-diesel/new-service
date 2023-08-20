@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"os"
 
+	"log/slog"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/vim-diesel/new-service/app/handlers/v1/testgrp"
 	"github.com/vim-diesel/new-service/app/handlers/v1/usergrp"
@@ -11,7 +13,6 @@ import (
 	"github.com/vim-diesel/new-service/business/core/user/stores/userdb"
 	"github.com/vim-diesel/new-service/business/web/v1/mid"
 	"github.com/vim-diesel/new-service/foundation/web"
-	"golang.org/x/exp/slog"
 )
 
 // APIMuxConfig contains all the mandatory systems required by handlers.

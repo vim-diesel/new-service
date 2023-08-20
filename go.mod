@@ -15,11 +15,11 @@ require (
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/joho/godotenv v1.5.1
 	golang.org/x/crypto v0.12.0
-	golang.org/x/exp v0.0.0-20230811145659-89c5cff77bcb
 )
 
 require (
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
+	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
