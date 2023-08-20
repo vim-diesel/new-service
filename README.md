@@ -100,81 +100,81 @@ Here is where the strictest policies are set. There is no logging at this level,
 ## Logging
 
 - What is the purpose of the logs you are building
-  ○ Know the purpose otherwise they get messy
-  ○ Logging everything as insurance policy:
-   § Logging is expensive
-  ○ Logging in prod should be same as dev
-   § No logging levels
-  ○ Two biggest:
-   § 1 : ability to maintain, manage, and debug
-   § 2 : store data in logs
-    □ If you cant write data to log your service must stop
-    □ Downfall of storing data in logs
+  - Know the purpose otherwise they get messy
+  - Logging everything as insurance policy:
+  - Logging is expensive
+  - Logging in prod should be same as dev
+  - No logging levels
+  - Two biggest:
+  - 1 : ability to maintain, manage, and debug
+  - 2 : store data in logs
+    - If you cant write data to log your service must stop
+    - Downfall of storing data in logs
 High ratio of signal to noise
 
 ## Convenience packages
 
-  ○ Do not build abstraction layers over dependencies
-  ○ Lots of work for something you will probably not need
-   § "I might want to replace this database, I will build a layer on top to switch out databases later" -> probably not going to happen
-  ○ Convenience package is not an abstraction layer:
-  ○ Average developer can maintain 10,000 lines of code
-   § Abstraction layer eats into this number
-   § Just use the dependencies API's and if you do need to rip it out later you can
+- Do not build abstraction layers over dependencies
+- Lots of work for something you will probably not need
+- "I might want to replace this database, I will build a layer on top to switch out databases later" -> probably not going to happen
+- Convenience package is not an abstraction layer:
+- Average developer can maintain 10,000 lines of code
+- Abstraction layer eats into this number
+- Just use the dependencies API's and if you do need to rip it out later you can
 
 ## Packaging
 
 - Packages should have clear purpose
-  ○ Exist within scope of domain
-  ○ Don't want packages that "contain" code
-   § You can do it a bit, at app layer absolutely, business layer maybe, foundation layer never
-   § "utils, helpers, common" ... are containment packages
-  ○ Do not define package of common types
-   § "models", "types"
-   § All packages will depend on it
-    □ Change one type and you have to change all other packages
-  ○ This is not a monolithic project, this is go not java
-  ○ We need firewalls between different parts of our package
-   § Package of common types destroys the firewall
-  ○ Every package should define its own data models for input and output
-  ○  Considering a package:
-   □ Doesn't "contain" code
-   □ We want to think about what the API is
-   □ Domain of problem
-   □ What layer it is
-   □ How does it input/output
+  - Exist within scope of domain
+  - Don't want packages that "contain" code
+  - You can do it a bit, at app layer absolutely, business layer maybe, foundation layer never
+  - "utils, helpers, common" ... are containment packages
+  - Do not define package of common types
+  - "models", "types"
+  - All packages will depend on it
+    - Change one type and you have to change all other packages
+  - This is not a monolithic project, this is go not java
+  - We need firewalls between different parts of our package
+  - Package of common types destroys the firewall
+  - Every package should define its own data models for input and output
+  - Considering a package:
+  - Doesn't "contain" code
+  - We want to think about what the API is
+  - Domain of problem
+  - What layer it is
+  - How does it input/output
 
 - If a package provides or contains:
-  ○ We want provision, not containing
-  ○ If it doesn't make sense to name one of source code files as package name, it probably contains
-  ○ Ie. Common package does not have common.go, (it has stuff like marshall.go, this.go, that.go…) so you know it is containing code, not providing anything
-  ○ If you want to know what's going on, look in the file names after the package
+  - We want provision, not containing
+  - If it doesn't make sense to name one of source code files as package name, it probably contains
+  - Ie. Common package does not have common.go, (it has stuff like marshall.go, this.go, that.go…) so you know it is containing code, not providing anything
+  - If you want to know what's going on, look in the file names after the package
 
 ## API input/output
 
-  ○ Type system allows you to define input and output of an API
-  ○ You can accept input in one of two ways:
-   § Concrete type: Data is This (what it is)
-    □ Most APIs should start out this way
-   § Interface type: Data does this (what it does)
-    □ Polymorphic: a piece of code changes its behaviour depending on the concrete data it's operating on
-  ○ APIs should only return concrete types
-   § Except error interface or empty interface
-  ○ Side note
-   § Generics give you ability to write polymorphic functions
-   § -> Code changes behavior depending on data its operating on
-   § Difference: When using interface type, you don't know what concrete data type is until runtime
-    □ When using generics, determining what concrete type is at compile type
-    □ Generics leverage go syntax
-    □ Empty interface uses Reflect package (an API)
+- Type system allows you to define input and output of an API
+- You can accept input in one of two ways:
+- Concrete type: Data is This (what it is)
+  - Most APIs should start out this way
+- Interface type: Data does this (what it does)
+  - Polymorphic: a piece of code changes its behaviour depending on the concrete data it's operating on
+- APIs should only return concrete types
+- Except error interface or empty interface
+- Side note
+- Generics give you ability to write polymorphic functions
+- -> Code changes behavior depending on data its operating on
+- Difference: When using interface type, you don't know what concrete data type is until runtime
+  - When using generics, determining what concrete type is at compile type
+  - Generics leverage go syntax
+  - Empty interface uses Reflect package (an API)
 
-   § Don't develop with interfaces, discover them:
-    □ Prototype driven development
-    □ data oriented design
-   § Every program we write is a data transformation
-    □ Understand the data, understand the problem
-   § prototype driven development with our concrete types
-    □ Once we have more than one concrete type being processed by a package, discover behaviours, then we refactor for interfaces
+- Don't develop with interfaces, discover them:
+  - Prototype driven development
+  - data oriented design
+- Every program we write is a data transformation
+  - Understand the data, understand the problem
+- prototype driven development with our concrete types
+  - Once we have more than one concrete type being processed by a package, discover behaviours, then we refactor for interfaces
 
 ## Database
 
@@ -185,29 +185,29 @@ Sqlx is our abstraction layer, and pgx is our chosen driver.
 ## Comments
 
 - Comments are code
-  ○ Proper sentence structure, grammar, punctuation
-  ○ Code you're writing can produce docs for free if you follow guidelines, especially using staticcheck
-  ○ Any comments above package name will be part of overview in the go doc
-   § File that is named for the package ("logger.go") should be only file that has comments above package name
-   § If you have a large overview for a package, don't pollute the main file, make a "doc.go" and put the overview in there above package directive
+  - Proper sentence structure, grammar, punctuation
+  - Code you're writing can produce docs for free if you follow guidelines, especially using staticcheck
+  - Any comments above package name will be part of overview in the go doc
+  - File that is named for the package ("logger.go") should be only file that has comments above package name
+  - If you have a large overview for a package, don't pollute the main file, make a "doc.go" and put the overview in there above package directive
 
 ## Configuration
 
-  ○ Only place config allowed to be read from is main.go
+- Only place config allowed to be read from is main.go
 
-  ○ All configuration should have a default value that at bare minimum works in dev environment
+- All configuration should have a default value that at bare minimum works in dev environment
 
-   § Cloned repo should run on its own (unless they need a key, which should be clear where they go for a key and where to store it)
+- Cloned repo should run on its own (unless they need a key, which should be clear where they go for a key and where to store it)
 
-  ○ Service should allow for --help
+- Service should allow for --help
 
-     § Operator can see all configurable values, their default values, and how to override defaults
+- Operator can see all configurable values, their default values, and how to override defaults
 
-   § Any config should be overridable by Env variable or commandline flags
+- Any config should be overridable by Env variable or commandline flags
 
-  ○ when app starts up, we should dump config we are using into the logs, and have ability to hide/mask any config that needs to maintain privacy
+- when app starts up, we should dump config we are using into the logs, and have ability to hide/mask any config that needs to maintain privacy
 
-   § Hiding credentials from logs is crucial
+- Hiding credentials from logs is crucial
 
 - ArdanLabs conf/v3 package does all this for us.
 
