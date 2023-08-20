@@ -7,8 +7,8 @@ import (
 	"log/slog"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/vim-diesel/new-service/app/handlers/v1/testgrp"
-	"github.com/vim-diesel/new-service/app/handlers/v1/usergrp"
+	"github.com/vim-diesel/new-service/app/services/sales-api/handlers/v1/testgrp"
+	"github.com/vim-diesel/new-service/app/services/sales-api/handlers/v1/usergrp"
 	"github.com/vim-diesel/new-service/business/core/user"
 	"github.com/vim-diesel/new-service/business/core/user/stores/userdb"
 	"github.com/vim-diesel/new-service/business/web/v1/mid"

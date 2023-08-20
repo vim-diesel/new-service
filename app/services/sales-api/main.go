@@ -15,10 +15,9 @@ import (
 	"log/slog"
 
 	"github.com/ardanlabs/conf/v3"
-	_ "github.com/go-sql-driver/mysql"
 
-	// "github.com/joho/godotenv"
-	"github.com/vim-diesel/new-service/app/handlers"
+	"github.com/joho/godotenv"
+	"github.com/vim-diesel/new-service/app/services/sales-api/handlers"
 	database "github.com/vim-diesel/new-service/business/sys/database/pgx"
 	"github.com/vim-diesel/new-service/business/web/v1/debug"
 )
@@ -44,19 +43,18 @@ func run(ctx context.Context, log *slog.Logger) error {
 	// -------------------------------------------------------------------------
 	// Configuration
 
-	// Load in the `.env` file
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	return fmt.Errorf("godotenv: %w", err)
-	// }
+	err := godotenv.Load()
+	if err != nil {
+		return fmt.Errorf("godotenv: %w", err)
+	}
 
 	dsn := os.Getenv("DSN")
 
 	cfg := struct {
 		conf.Version
 		Web struct {
-			ReadTimeout     time.Duration `conf:"default:5s"`
-			WriteTimeout    time.Duration `conf:"default:10s"`
+			ReadTimeout     time.Duration `conf:"default:10s"`
+			WriteTimeout    time.Duration `conf:"default:15s"`
 			IdleTimeout     time.Duration `conf:"default:120s"`
 			ShutdownTimeout time.Duration `conf:"default:20s"`
 			APIHost         string        `conf:"default:0.0.0.0:3000"`
@@ -90,11 +88,11 @@ func run(ctx context.Context, log *slog.Logger) error {
 	// -------------------------------------------------------------------------
 	// Database Support
 
-	log.InfoContext(ctx, "startup", "status", "initializing database support")
+	log.InfoContext(ctx, "startup", "status", "initializing neon.tech database support")
 
-	db, err := database.Open(dsn)
+	db, err := database.Open(dsn, 2, 112)
 	if err != nil {
-		return fmt.Errorf("failed to initialize a connection to database: %w", err)
+		return fmt.Errorf("failed to initialize a connection to neon.tech database: %w", err)
 	}
 
 	// If we need to, we can increase the deadline here. Is quite slow, because

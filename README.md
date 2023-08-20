@@ -53,6 +53,14 @@ This maintaining of strict firewalls between APIs helps to avoid cascading break
 
 Every line of code is an integer read/write. Every function is a data transformation. 
 
+## Load Testing on Fly.io with a Neon.tech Database
+
+Our fly.io config allows for 1 instance and a hard limit of 25 concurrent requests. Our logs are saying it takes ~40ms for a request to be completed once it hits the server. 
+
+The distribution of the load: 
+
+![load distribution](https://i.imgur.com/eGLBToV.png)
+
 
 ## App layers
 

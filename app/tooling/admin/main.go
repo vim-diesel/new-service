@@ -39,7 +39,7 @@ func run() error {
 }
 
 func migrate(dsn string) error {
-	db, err := database.Open(dsn)
+	db, err := database.Open(dsn, 2, 112)
 	if err != nil {
 		return fmt.Errorf("connect database: %w", err)
 	}
@@ -57,7 +57,7 @@ func migrate(dsn string) error {
 }
 
 func seed(dsn string) error {
-	db, err := database.Open(dsn)
+	db, err := database.Open(dsn, 2, 112)
 	if err != nil {
 		return fmt.Errorf("connect database: %w", err)
 	}

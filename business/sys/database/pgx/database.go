@@ -42,33 +42,14 @@ type Config struct {
 }
 
 // Open knows how to open a database connection based on the configuration.
-func Open(connStr string) (*sqlx.DB, error) {
-	// sslMode := "require"
-	// if cfg.DisableTLS {
-	// 	sslMode = "disable"
-	// }
-
-	// q := make(url.Values)
-	// q.Set("sslmode", sslMode)
-	// q.Set("timezone", "utc")
-	// if cfg.Schema != "" {
-	// 	q.Set("search_path", cfg.Schema)
-	// }
-
-	// u := url.URL{
-	// 	Scheme:   "postgres",
-	// 	User:     url.UserPassword(cfg.User, cfg.Password),
-	// 	Host:     cfg.Host,
-	// 	Path:     cfg.Name,
-	// 	RawQuery: q.Encode(),
-	// }
+func Open(connStr string, maxIdleConns int, maxOpenConns int) (*sqlx.DB, error) {
 
 	db, err := sqlx.Open("pgx", connStr)
 	if err != nil {
 		return nil, err
 	}
-	// db.SetMaxIdleConns(cfg.MaxIdleConns)
-	// db.SetMaxOpenConns(cfg.MaxOpenConns)
+	db.SetMaxIdleConns(maxIdleConns)
+	db.SetMaxOpenConns(maxOpenConns)
 
 	return db, nil
 }
