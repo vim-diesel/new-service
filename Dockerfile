@@ -32,7 +32,7 @@ CMD ["./sales-api"]
 
 LABEL org.opencontainers.image.created="${BUILD_DATE}" \
     org.opencontainers.image.title="sales-api" \
-    org.opencontainers.image.authors="William Kennedy <bill@ardanlabs.com>" \
-    org.opencontainers.image.source="https://github.com/ardanlabs/service/app/sales-api" \
+    org.opencontainers.image.authors="Ian Clark <ian.clark@hotmail.com>" \
+    org.opencontainers.image.source="https://github.com/vim-diesel/new-service/app/sales-api" \
     org.opencontainers.image.revision="${BUILD_REF}" \
-    org.opencontainers.image.vendor="Ardan Labs"
+    org.opencontainers.image.vendor="Vim Diesel"

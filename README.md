@@ -26,11 +26,9 @@ What follows are some general ideas and philosophies that drive the development 
 
 ## Why Go?
 
-- A lower # of lines of code.
-
 - Readability as a first principle.
 
-- Average developer can maintain 10,000 lines of code. 
+- Average developer can maintain 10,000 lines of code.
 
 - Thin layer of abstraction
 
@@ -102,7 +100,7 @@ Purpose of type system is that it allows for Input and Output through an API. So
 
 This maintaining of strict firewalls between APIs helps to avoid cascading breaking code changes. This is not a monolithic project. This is Go, not Java. We want firewalls between the different parts of our program.
 
-This typing system also allows us to leverage the compiler for data validation, since the app layer needs to use functions that are defined in the business layer, in order to send data to the business layer. So the business layer knows the data its getting is already in the format of the struct types it has defined. This is a huge advantage over dynamically typed languages. 
+This typing system also allows us to leverage the compiler for data validation, since the app layer needs to use functions that are defined in the business layer, in order to send data to the business layer. So the business layer knows the data its getting is already in the format of the struct types it has defined. This is a huge advantage over dynamically typed languages.
 
 Every line of code is an integer read/write. Every function is a data transformation.
 
@@ -114,7 +112,7 @@ Every API outputs concrete data (except for errors and empty interfaces). We don
 
 Our fly.io config allows for 1 instance and a hard limit of 25 concurrent requests. Our logs are saying it takes ~40ms for a request to be completed once it hits the server. Note that each request includes a database call.
 
-The distribution of the load (100 concurrent requests, 1000 requests):
+The distribution of the load (100 concurrent requests, 10000 requests):
 
 ![load distribution](https://i.imgur.com/eGLBToV.png)
 
@@ -159,15 +157,15 @@ Here is where the strictest policies are set. There is no logging at this level,
 - What is the purpose of the logs you are building
   - Know the purpose otherwise they get messy
   - Logging everything as insurance policy:
-  - Logging is expensive
+    - Logging is expensive
+    - Logs are noisy
   - Logging in prod should be same as dev
   - No logging levels
-  - Two biggest:
+  - Two biggest points of logs:
   - 1 : ability to maintain, manage, and debug
-  - 2 : store data in logs
+  - 2 : if you store data in logs:
     - If you cant write data to log your service must stop
-    - Downfall of storing data in logs
-High ratio of signal to noise
+    - Downfall of storing data in logs is high ratio of noise to signals
 
 ## Convenience packages
 
@@ -184,8 +182,8 @@ High ratio of signal to noise
 - Packages should have clear purpose
   - Exist within scope of domain
   - Don't want packages that "contain" code
-  - You can do it a bit, at app layer absolutely, business layer maybe, foundation layer never
-  - "utils, helpers, common" ... are containment packages
+    - You can do it a bit, at app layer absolutely, business layer maybe, foundation layer never
+    - "utils, helpers, common" ... are containment packages
   - Do not define package of common types
   - "models", "types"
   - All packages will depend on it
