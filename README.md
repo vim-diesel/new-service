@@ -12,6 +12,50 @@ This project is for learning and demonstration purposes only.
 
 What follows are some general ideas and philosophies that drive the development of this service.
 
+## Aspirations for this course
+
+- Be a champion of efficiency and simplicity.
+
+- Have a point of view of good development practices.
+
+- Value introspection and self-review.
+
+- Legacy software: Do you care about the code you leave behind? Will your work continue to be used and expanded upon or will it be thrown out because it is too hard to maintain?
+
+- Have a strong mental model of the codebase. Debuggers just run code in slow motion. The real debugging comes from having a strong mental model and knowing what is happening when you inspect the logs.
+
+## Why Go?
+
+- A lower # of lines of code.
+
+- Readability as a first principle.
+
+- Average developer can maintain 10,000 lines of code. 
+
+- Thin layer of abstraction
+
+- Hardware is the platform, not a VM like Java or Python
+
+- You can understand the cost of decisions. We are engineering, not hacking. "Good engineering is about understanding the tradeoffs and being able to explain them."
+
+- Go's Core Mission:
+  - Have a strong mental model
+  - predict how code will run
+  - understand what is going on
+
+- Go is able to take advantage of hardware with a balance of productivity vs. performance.
+
+- With Go, we never make guesses. We focus on Correctness:
+  - Integrity
+  - Readability
+  - Simplicity
+
+- After Correctness we can refactor into Performance if needed. Make it correct, cleaer, concise, then make it fast.
+
+Taking this course allows me to learn how to write a service in Go, which will allow me to learn how to read code.
+
+"If computer people lack knowledge and understanding, then what they select will also be lacking" -Alan Kay"
+
 ## Design Philosophies
 
 Prototype driven development.
@@ -20,12 +64,19 @@ Data Oriented design.
 
 Integrity, Simplicity, Readability, and finally Performance(if necessary).
 
+We don't write perfect code, write drafts and refactor when we see improvments.
+
 Readability is about not hiding things. Make them obvious.
+
 Simplicity is about hiding complexity. Always start with readability and refactor into simplicity if you can find it
 
-Don't add complexity until you need to
+Don't add complexity until you absolutely need to. For examle, we don't start with microservices.
 
-Precision. :)
+Precision.
+
+Build tags.
+
+High signal to noise ratio in our logs. Don't log what you don't need.
 
 If you don't understand that data, you don't understand the problem. If you don't understand the problem, get some code down and work your way to understanding the data/problem.
 
@@ -37,7 +88,7 @@ No code generation. Don't hide your SQL and database code
 
 No ORMs. Writing plain SQL allows us to fully debug and maintain.
 
-Make things easy to understand and debug/maintain, not easy to do
+Make things easy to understand and debug/maintain, not easy to do. Things can be redundant and tedious, but thats necessary for our higher priority, when code is failing and we need to read and debug. Write once, refactor a couple times, read it a thousand times.
 
 Packaging allows us to have firewalls between the different domains of our program.
 
@@ -51,7 +102,13 @@ Purpose of type system is that it allows for Input and Output through an API. So
 
 This maintaining of strict firewalls between APIs helps to avoid cascading breaking code changes. This is not a monolithic project. This is Go, not Java. We want firewalls between the different parts of our program.
 
+This typing system also allows us to leverage the compiler for data validation, since the app layer needs to use functions that are defined in the business layer, in order to send data to the business layer. So the business layer knows the data its getting is already in the format of the struct types it has defined. This is a huge advantage over dynamically typed languages. 
+
 Every line of code is an integer read/write. Every function is a data transformation.
+
+Don't design with interfaces. Discover them.
+
+Every API outputs concrete data (except for errors and empty interfaces). We don't want to design with interfaces, we want to discover them. We want to prototype with concrete types, then refactor into interfaces.
 
 ## Load Testing on Fly.io with a Neon.tech Database
 
@@ -118,8 +175,8 @@ High ratio of signal to noise
 - Lots of work for something you will probably not need
 - "I might want to replace this database, I will build a layer on top to switch out databases later" -> probably not going to happen
 - Convenience package is not an abstraction layer:
-- Average developer can maintain 10,000 lines of code
-- Abstraction layer eats into this number
+  - Average developer can maintain 10,000 lines of code
+  - Abstraction layer eats into this number
 - Just use the dependencies API's and if you do need to rip it out later you can
 
 ## Packaging
@@ -181,6 +238,8 @@ High ratio of signal to noise
 Migrations are done using [ArdanLabs/darwin](https://github.com/ardanlabs/darwin), a database schema evolution api for Go.
 
 Sqlx is our abstraction layer, and pgx is our chosen driver.
+
+Note that Ardan Labs had to modify the darwin package to work with pgx, as it was originally written for pq.
 
 ## Comments
 
