@@ -16,7 +16,7 @@ import (
 
 	"github.com/ardanlabs/conf/v3"
 
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 	"github.com/vim-diesel/new-service/app/services/sales-api/handlers"
 	database "github.com/vim-diesel/new-service/business/sys/database/pgx"
 	"github.com/vim-diesel/new-service/business/web/v1/debug"
@@ -43,10 +43,10 @@ func run(ctx context.Context, log *slog.Logger) error {
 	// -------------------------------------------------------------------------
 	// Configuration
 
-	err := godotenv.Load()
-	if err != nil {
-		return fmt.Errorf("godotenv: %w", err)
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	return fmt.Errorf("godotenv: %w", err)
+	// }
 
 	dsn := os.Getenv("DSN")
 
@@ -96,7 +96,7 @@ func run(ctx context.Context, log *slog.Logger) error {
 	}
 
 	// If we need to, we can increase the deadline here. Is quite slow, because
-	// This is a serverless solution, so cold starts are a thing.
+	// this is a serverless solution, so cold starts are a thing.
 	pingDeadline := time.Duration(5 * time.Second)
 
 	if err := database.StatusCheck(ctx, db, pingDeadline); err != nil {
