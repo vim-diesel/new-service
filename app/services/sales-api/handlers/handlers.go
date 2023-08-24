@@ -27,6 +27,7 @@ func APIMux(cfg APIMuxConfig) *web.App {
 	app := web.NewApp(cfg.Shutdown, mid.Logger(cfg.Log), mid.Errors(cfg.Log), mid.Panics())
 
 	app.Handle(http.MethodGet, "/test", testgrp.Test)
+	app.Handle(http.MethodGet, "/login", testgrp.TestingAuth)
 
 	// =========================================================================
 

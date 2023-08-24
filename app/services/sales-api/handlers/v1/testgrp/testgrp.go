@@ -28,3 +28,16 @@ func Test(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
 	return web.Respond(ctx, w, status, http.StatusOK)
 
 }
+
+func TestingAuth(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	status := struct {
+		Status string
+	}{
+		Status: "OK",
+	}
+
+	return web.Respond(ctx, w, status, http.StatusOK)
+}
