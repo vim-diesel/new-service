@@ -16,11 +16,16 @@ import (
 
 	"github.com/ardanlabs/conf/v3"
 
-	// "github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 	"github.com/vim-diesel/new-service/app/services/sales-api/handlers"
 	database "github.com/vim-diesel/new-service/business/sys/database/pgx"
 	"github.com/vim-diesel/new-service/business/web/v1/debug"
 )
+
+// TODO:
+// - database.Open() is not returning an error when we fail to get a DSN from
+//   .env. This is the sqlx package so there probably isn't anything to do about
+//   this, just something to be aware of.
 
 var build = "develop"
 
@@ -43,10 +48,10 @@ func run(ctx context.Context, log *slog.Logger) error {
 	// -------------------------------------------------------------------------
 	// Configuration
 
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	return fmt.Errorf("godotenv: %w", err)
-	// }
+	err := godotenv.Load()
+	if err != nil {
+		return fmt.Errorf("godotenv: %w", err)
+	}
 
 	dsn := os.Getenv("DSN")
 

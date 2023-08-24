@@ -8,7 +8,7 @@ This project has been modified to use [Neon.tech](https://neon.tech/) database, 
 
 Instead it will be run using a cheaper alternative such as [Fly.io](https://fly.io) or Google Cloud Run.
 
-This project is for learning and demonstration purposes only.
+This project is for learning and demonstration purposes only. In order for it to run on your machine you need a DSN string from Neon.tech (maybe it will work with other postgres servers), and a .env file (example provided).
 
 What follows are some general ideas and philosophies that drive the development of this service.
 
@@ -110,7 +110,7 @@ Every API outputs concrete data (except for errors and empty interfaces). We don
 
 ## Load Testing on Fly.io with a Neon.tech Database
 
-Our fly.io config allows for 1 instance and a hard limit of 25 concurrent requests. Our logs are saying it takes ~40ms for a request to be completed once it hits the server. Note that each request includes a database call.
+Our fly.io config allows for 1 instance and a hard limit of 25 concurrent requests. I don't know how many concurrent requests one of their tiny machines (1cpu and 256mb ram) can handle. Our logs are saying it takes ~40ms for a request to be completed once it hits the server. Note that each request includes a database call.
 
 The distribution of the load (100 concurrent requests, 10000 requests):
 
@@ -251,6 +251,7 @@ Note that Ardan Labs had to modify the darwin package to work with pgx, as it wa
 ## Configuration
 
 - Only place config allowed to be read from is main.go
+  - We don't pass config around in our program.
 
 - All configuration should have a default value that at bare minimum works in dev environment
 
@@ -267,6 +268,8 @@ Note that Ardan Labs had to modify the darwin package to work with pgx, as it wa
 - Hiding credentials from logs is crucial
 
 - ArdanLabs conf/v3 package does all this for us.
+
+We kinda break this, since we use a .env file for the connection. But maybe we can still use the conf package to read the .env file.
 
 ## Error handling
 
