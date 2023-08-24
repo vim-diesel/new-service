@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/vim-diesel/new-service/business/sys/validate"
+	"github.com/vim-diesel/new-service/foundation/validate"
 )
 
 // QueryFilter holds the available fields a query can be filtered on.

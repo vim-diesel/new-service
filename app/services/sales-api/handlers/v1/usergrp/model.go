@@ -7,8 +7,9 @@ import (
 
 	"github.com/vim-diesel/new-service/business/core/user"
 	"github.com/vim-diesel/new-service/business/cview/user/summary"
+
 	// "github.com/vim-diesel/new-service/business/cview/user/summary"
-	"github.com/vim-diesel/new-service/business/sys/validate"
+	"github.com/vim-diesel/new-service/foundation/validate"
 )
 
 // AppUser represents information about an individual user.

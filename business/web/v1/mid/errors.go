@@ -6,7 +6,7 @@ import (
 
 	"log/slog"
 
-	"github.com/vim-diesel/new-service/business/sys/validate"
+	"github.com/vim-diesel/new-service/foundation/validate"
 
 	// "github.com/vim-diesel/new-service/business/web/auth"
 	v1 "github.com/vim-diesel/new-service/business/web/v1"

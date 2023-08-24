@@ -34,9 +34,11 @@ func TestingAuth(ctx context.Context, w http.ResponseWriter, r *http.Request) er
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	status := struct {
-		Status string
+		Status  string
+		Message string
 	}{
-		Status: "OK",
+		Status:  "OK",
+		Message: "You are authorized to view this page",
 	}
 
 	return web.Respond(ctx, w, status, http.StatusOK)

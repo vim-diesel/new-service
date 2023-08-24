@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/vim-diesel/new-service/business/sys/validate"
+	"github.com/vim-diesel/new-service/foundation/validate"
 )
 
 // Set of directions for data ordering.

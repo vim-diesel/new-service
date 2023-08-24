@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/vim-diesel/new-service/business/sys/validate"
+	"github.com/vim-diesel/new-service/foundation/validate"
 )
 
 // Response is what is returned when a query call is performed.

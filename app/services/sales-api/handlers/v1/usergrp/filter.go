@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/vim-diesel/new-service/business/core/user"
 	"github.com/vim-diesel/new-service/business/cview/user/summary"
-	"github.com/vim-diesel/new-service/business/sys/validate"
+	"github.com/vim-diesel/new-service/foundation/validate"
 )
 
 func parseFilter(r *http.Request) (user.QueryFilter, error) {
