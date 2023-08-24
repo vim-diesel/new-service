@@ -102,7 +102,7 @@ func run(ctx context.Context, log *slog.Logger) error {
 
 	// If we need to, we can increase the deadline here. Is quite slow, because
 	// this is a serverless solution, so cold starts are a thing.
-	pingDeadline := time.Duration(5 * time.Second)
+	pingDeadline := time.Duration(15 * time.Second)
 
 	if err := database.StatusCheck(ctx, db, pingDeadline); err != nil {
 		return fmt.Errorf("database statuscheck: %w", err)
