@@ -19,6 +19,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/vim-diesel/new-service/app/services/sales-api/handlers"
 	database "github.com/vim-diesel/new-service/business/sys/database/pgx"
+	"github.com/vim-diesel/new-service/business/web/auth"
 	"github.com/vim-diesel/new-service/business/web/v1/debug"
 )
 
@@ -114,6 +115,22 @@ func run(ctx context.Context, log *slog.Logger) error {
 	}()
 
 	// -------------------------------------------------------------------------
+	// Initialize authentication support
+
+	log.InfoContext(ctx, "startup", "status", "initializing authentication support")
+
+	authCfg := auth.Config{
+		Log:    log,
+		DB:     db,
+		Issuer: "https://accounts.google.com",
+	}
+
+	auth, err := auth.New(authCfg)
+	if err != nil {
+		return fmt.Errorf("constructing auth: %w", err)
+	}
+
+	// -------------------------------------------------------------------------
 	// Start Debug Service
 
 	log.InfoContext(ctx, "startup", "status", "debug v1 router started", "host", cfg.Web.DebugHost)
@@ -136,6 +153,7 @@ func run(ctx context.Context, log *slog.Logger) error {
 		Shutdown: shutdown,
 		Log:      log,
 		DB:       db,
+		Auth:     auth,
 	})
 
 	api := http.Server{

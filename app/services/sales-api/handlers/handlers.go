@@ -11,6 +11,7 @@ import (
 	"github.com/vim-diesel/new-service/app/services/sales-api/handlers/v1/usergrp"
 	"github.com/vim-diesel/new-service/business/core/user"
 	"github.com/vim-diesel/new-service/business/core/user/stores/userdb"
+	"github.com/vim-diesel/new-service/business/web/auth"
 	"github.com/vim-diesel/new-service/business/web/v1/mid"
 	"github.com/vim-diesel/new-service/foundation/web"
 )
@@ -20,6 +21,7 @@ type APIMuxConfig struct {
 	Shutdown chan os.Signal
 	Log      *slog.Logger
 	DB       *sqlx.DB
+	Auth     *auth.Auth
 }
 
 // APIMux constructs a http.Handler with all application routes defined.
