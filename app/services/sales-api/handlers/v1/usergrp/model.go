@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/vim-diesel/new-service/business/core/user"
+	"github.com/vim-diesel/new-service/business/cview/user/summary"
 	// "github.com/vim-diesel/new-service/business/cview/user/summary"
 	"github.com/vim-diesel/new-service/business/sys/validate"
 )
@@ -148,18 +149,18 @@ func (app AppUpdateUser) Validate() error {
 // =============================================================================
 
 // AppSummary represents information about an individual user and their products.
-// type AppSummary struct {
-// 	UserID     string  `json:"userID"`
-// 	UserName   string  `json:"userName"`
-// 	TotalCount int     `json:"totalCount"`
-// 	TotalCost  float64 `json:"totalCost"`
-// }
+type AppSummary struct {
+	UserID     string  `json:"userID"`
+	UserName   string  `json:"userName"`
+	TotalCount int     `json:"totalCount"`
+	TotalCost  float64 `json:"totalCost"`
+}
 
-// func toAppSummary(smm summary.Summary) AppSummary {
-// 	return AppSummary{
-// 		UserID:     smm.UserID.String(),
-// 		UserName:   smm.UserName,
-// 		TotalCount: smm.TotalCount,
-// 		TotalCost:  smm.TotalCost,
-// 	}
-// }
+func toAppSummary(smm summary.Summary) AppSummary {
+	return AppSummary{
+		UserID:     smm.UserID.String(),
+		UserName:   smm.UserName,
+		TotalCount: smm.TotalCount,
+		TotalCost:  smm.TotalCost,
+	}
+}

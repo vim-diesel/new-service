@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/vim-diesel/new-service/business/core/user"
-	// "github.com/vim-diesel/new-service/business/cview/user/summary"
+	"github.com/vim-diesel/new-service/business/cview/user/summary"
 	"github.com/vim-diesel/new-service/business/sys/validate"
 )
 
@@ -61,22 +61,22 @@ func parseFilter(r *http.Request) (user.QueryFilter, error) {
 
 // =============================================================================
 
-// func parseSummaryFilter(r *http.Request) (summary.QueryFilter, error) {
-// 	values := r.URL.Query()
+func parseSummaryFilter(r *http.Request) (summary.QueryFilter, error) {
+	values := r.URL.Query()
 
-// 	var filter summary.QueryFilter
+	var filter summary.QueryFilter
 
-// 	if userID := values.Get("user_id"); userID != "" {
-// 		id, err := uuid.Parse(userID)
-// 		if err != nil {
-// 			return summary.QueryFilter{}, validate.NewFieldsError("user_id", err)
-// 		}
-// 		filter.WithUserID(id)
-// 	}
+	if userID := values.Get("user_id"); userID != "" {
+		id, err := uuid.Parse(userID)
+		if err != nil {
+			return summary.QueryFilter{}, validate.NewFieldsError("user_id", err)
+		}
+		filter.WithUserID(id)
+	}
 
-// 	if userName := values.Get("user_name"); userName != "" {
-// 		filter.WithUserName(userName)
-// 	}
+	if userName := values.Get("user_name"); userName != "" {
+		filter.WithUserName(userName)
+	}
 
-// 	return filter, nil
-// }
+	return filter, nil
+}
