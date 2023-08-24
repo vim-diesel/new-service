@@ -29,15 +29,6 @@ type Claims struct {
 	Roles []user.Role `json:"roles"`
 }
 
-// GoogleClaims -
-type GoogleClaims struct {
-	Email         string `json:"email"`
-	EmailVerified bool   `json:"email_verified"`
-	FirstName     string `json:"given_name"`
-	LastName      string `json:"family_name"`
-	jwt.StandardClaims
-}
-
 // KeyLookup declares a method set of behavior for looking up
 // private and public keys for JWT use. The return could be a
 // PEM encoded string or a JWS based key.
@@ -225,6 +216,15 @@ func (a *Auth) opaPolicyEvaluation(ctx context.Context, opaPolicy string, rule s
 }
 
 // =============================================================================
+
+// GoogleClaims -
+type GoogleClaims struct {
+	Email         string `json:"email"`
+	EmailVerified bool   `json:"email_verified"`
+	FirstName     string `json:"given_name"`
+	LastName      string `json:"family_name"`
+	jwt.StandardClaims
+}
 
 func googlePublicKeyLookup(keyID string) (string, error) {
 	resp, err := http.Get("https://www.googleapis.com/oauth2/v1/certs")

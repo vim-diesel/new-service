@@ -28,21 +28,3 @@ func Test(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
 	return web.Respond(ctx, w, status, http.StatusOK)
 
 }
-
-// Test is our example route.
-func TestUserLogin(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
-
-	// Validate the data
-	// Call into the business layer
-
-	status := struct {
-		Status  string
-		Message string
-	}{
-		Status:  "OK",
-		Message: "Testing OAuth2 with Google",
-	}
-
-	return web.Respond(ctx, w, status, http.StatusOK)
-
-}
