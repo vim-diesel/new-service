@@ -121,7 +121,6 @@ func run(ctx context.Context, log *slog.Logger) error {
 
 	authCfg := auth.Config{
 		Log:    log,
-		DB:     db,
 		Issuer: "https://accounts.google.com",
 	}
 

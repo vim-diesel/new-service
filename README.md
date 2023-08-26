@@ -1,6 +1,6 @@
 # new-service
 
-This is built using code from [ardanlabs/service](https://github.com/ardanlabs/service)
+This is built using code from [vim-diesel/new-service](https://github.com/vim-diesel/new-service)
 
 ## Description
 
@@ -37,6 +37,7 @@ What follows are some general ideas and philosophies that drive the development 
 - You can understand the cost of decisions. We are engineering, not hacking. "Good engineering is about understanding the tradeoffs and being able to explain them."
 
 - Go's Core Mission:
+
   - Have a strong mental model
   - predict how code will run
   - understand what is going on
@@ -44,6 +45,7 @@ What follows are some general ideas and philosophies that drive the development 
 - Go is able to take advantage of hardware with a balance of productivity vs. performance.
 
 - With Go, we never make guesses. We focus on Correctness:
+
   - Integrity
   - Readability
   - Simplicity
@@ -90,7 +92,7 @@ Make things easy to understand and debug/maintain, not easy to do. Things can be
 
 Packaging allows us to have firewalls between the different domains of our program.
 
-We write packages that __provide__, not packages that contain. For example, any packages that are named "util, helper" are containment packages and are avoided.
+We write packages that **provide**, not packages that contain. For example, any packages that are named "util, helper" are containment packages and are avoided.
 
 Similarly, we don't share models or types across packages/domains. So there are no files or packages named "models" or "types".
 
@@ -180,6 +182,7 @@ Here is where the strictest policies are set. There is no logging at this level,
 ## Packaging
 
 - Packages should have clear purpose
+
   - Exist within scope of domain
   - Don't want packages that "contain" code
     - You can do it a bit, at app layer absolutely, business layer maybe, foundation layer never
@@ -219,6 +222,7 @@ Here is where the strictest policies are set. There is no logging at this level,
 - Generics give you ability to write polymorphic functions
 - -> Code changes behavior depending on data its operating on
 - Difference: When using interface type, you don't know what concrete data type is until runtime
+
   - When using generics, determining what concrete type is at compile type
   - Generics leverage go syntax
   - Empty interface uses Reflect package (an API)
@@ -233,7 +237,7 @@ Here is where the strictest policies are set. There is no logging at this level,
 
 ## Database
 
-Migrations are done using [ArdanLabs/darwin](https://github.com/ardanlabs/darwin), a database schema evolution api for Go.
+Migrations are done using [vim-diesel/new-darwin](https://github.com/vim-diesel/new-darwin), a database schema evolution api for Go.
 
 Sqlx is our abstraction layer, and pgx is our chosen driver.
 
@@ -251,6 +255,7 @@ Note that Ardan Labs had to modify the darwin package to work with pgx, as it wa
 ## Configuration
 
 - Only place config allowed to be read from is main.go
+
   - We don't pass config around in our program.
 
 - All configuration should have a default value that at bare minimum works in dev environment
@@ -269,7 +274,7 @@ Note that Ardan Labs had to modify the darwin package to work with pgx, as it wa
 
 - ArdanLabs conf/v3 package does all this for us.
 
-We kinda break this, since we use a .env file for the connection. But maybe we can still use the conf package to read the .env file.
+We kinda break this, since we use a .env file. But maybe we can still use the conf package to read the .env file, but I don't know how to also use the validation tags with that.
 
 ## Error handling
 
@@ -278,3 +283,9 @@ We kinda break this, since we use a .env file for the connection. But maybe we c
 ## HTTP Routing and Load shedding
 
 ## Handlers, Web Framework, Middleware
+
+## Authentication & Authorization
+
+We wrote our own code to validate the tokens sent by Google to our front end. You would never want to do this and always want to use auth software like OPA. But this is a learning project so it's done for educational purposes.
+
+There are two auth packages, one written by ArdanLabs, which uses OPA, and one written by me, which parses the token sent by Google without OPA.
