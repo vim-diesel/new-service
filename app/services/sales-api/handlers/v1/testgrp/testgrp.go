@@ -12,6 +12,9 @@ import (
 
 // Test is our example route.
 func Test(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	if n := rand.Intn(100); n%2 == 0 {
 		return v1.NewRequestError(errors.New("TRUSTED ERROR"), http.StatusBadRequest)
 	}
