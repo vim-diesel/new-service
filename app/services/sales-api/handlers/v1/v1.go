@@ -28,7 +28,7 @@ func Routes(app *web.App, cfg Config) {
 	const version = "v1"
 
 	app.Handle(http.MethodGet, version, "/test", testgrp.Test)
-	app.Handle(http.MethodGet, version, "/login", testgrp.TestingAuth)
+	app.Handle(http.MethodGet, version, "/test/auth", testgrp.TestingAuth)
 
 	// =========================================================================
 
