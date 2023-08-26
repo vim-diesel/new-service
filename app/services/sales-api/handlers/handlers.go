@@ -7,37 +7,57 @@ import (
 	"log/slog"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/vim-diesel/new-service/app/services/sales-api/handlers/v1/testgrp"
-	"github.com/vim-diesel/new-service/app/services/sales-api/handlers/v1/usergrp"
-	"github.com/vim-diesel/new-service/business/core/user"
-	"github.com/vim-diesel/new-service/business/core/user/stores/userdb"
-	"github.com/vim-diesel/new-service/business/web/auth"
+	v1 "github.com/vim-diesel/new-service/app/services/sales-api/handlers/v1"
+	"github.com/vim-diesel/new-service/business/web/googauth"
 	"github.com/vim-diesel/new-service/business/web/v1/mid"
 	"github.com/vim-diesel/new-service/foundation/web"
 )
 
+// Options represent optional parameters.
+type Options struct {
+	corsOrigin string
+}
+
+// WithCORS provides configuration options for CORS.
+func WithCORS(origin string) func(opts *Options) {
+	return func(opts *Options) {
+		opts.corsOrigin = origin
+	}
+}
+
 // APIMuxConfig contains all the mandatory systems required by handlers.
 type APIMuxConfig struct {
+	Build    string
 	Shutdown chan os.Signal
 	Log      *slog.Logger
 	DB       *sqlx.DB
-	Auth     *auth.Auth
+	GoogAuth *googauth.GoogAuth
 }
 
 // APIMux constructs a http.Handler with all application routes defined.
-func APIMux(cfg APIMuxConfig) *web.App {
-	app := web.NewApp(cfg.Shutdown, mid.Logger(cfg.Log), mid.Errors(cfg.Log), mid.Panics())
+func APIMux(cfg APIMuxConfig, options ...func(opts *Options)) http.Handler {
+	var opts Options
+	for _, option := range options {
+		option(&opts)
+	}
 
-	app.Handle(http.MethodGet, "/test", testgrp.Test)
-	app.Handle(http.MethodGet, "/login", testgrp.TestingAuth)
+	app := web.NewApp(
+		cfg.Shutdown,
+		mid.Logger(cfg.Log),
+		mid.Errors(cfg.Log),
+		mid.Panics(),
+	)
 
-	// =========================================================================
+	if opts.corsOrigin != "" {
+		app.EnableCORS(mid.Cors(opts.corsOrigin))
+	}
 
-	usrCore := user.NewCore(userdb.NewStore(cfg.Log, cfg.DB))
-
-	ugh := usergrp.New(usrCore)
-
-	app.Handle(http.MethodGet, "/users", ugh.Query)
+	v1.Routes(app, v1.Config{
+		Build:    cfg.Build,
+		Log:      cfg.Log,
+		GoogAuth: cfg.GoogAuth,
+		DB:       cfg.DB,
+	})
 
 	return app
 }

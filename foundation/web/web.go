@@ -41,19 +41,52 @@ func (a *App) SignalShutdown() {
 	a.shutdown <- syscall.SIGTERM
 }
 
+// EnableCORS enables CORS preflight requests to work in the middleware. It
+// prevents the MethodNotAllowedHandler from being called. This must be enabled
+// for the CORS middleware to work.
+func (a *App) EnableCORS(mw Middleware) {
+	a.mw = append(a.mw, mw)
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
+		return Respond(ctx, w, "OK", http.StatusOK)
+	}
+	handler = wrapMiddleware(a.mw, handler)
+
+	a.ContextMux.OptionsHandler = func(w http.ResponseWriter, r *http.Request, params map[string]string) {
+
+		ctx := r.Context()
+		v := Values{
+			TraceID: uuid.NewString(),
+			Now:     time.Now().UTC(),
+		}
+		ctx = SetValues(ctx, &v)
+
+		handler(ctx, w, r)
+	}
+}
+
 // Handle sets a handler function for a given HTTP method and path pair
 // to the application server mux.
-func (a *App) Handle(method string, path string, handler Handler, mw ...Middleware) {
+func (a *App) Handle(method string, group string, path string, handler Handler, mw ...Middleware) {
 	handler = wrapMiddleware(mw, handler)
 	handler = wrapMiddleware(a.mw, handler)
 
+	a.handle(method, group, path, handler)
+}
+
+// =============================================================================
+
+// Handle sets a handler function for a given HTTP method and path pair
+// to the application server mux.
+func (a *App) handle(method string, group string, path string, handler Handler) {
 	h := func(w http.ResponseWriter, r *http.Request) {
 
 		v := Values{
 			TraceID: uuid.NewString(),
 			Now:     time.Now().UTC(),
 		}
-		ctx := context.WithValue(r.Context(), key, &v)
+		ctx := r.Context()
+		ctx = SetValues(ctx, &v)
 
 		if err := handler(ctx, w, r); err != nil {
 			if validateShutdown(err) {
@@ -61,11 +94,14 @@ func (a *App) Handle(method string, path string, handler Handler, mw ...Middlewa
 				return
 			}
 		}
-
-		// ANY CODE I WANT
 	}
 
-	a.ContextMux.Handle(method, path, h)
+	finalPath := path
+	if group != "" {
+		finalPath = "/" + group + path
+	}
+
+	a.ContextMux.Handle(method, finalPath, h)
 }
 
 // validateShutdown validates the error for special conditions that do not
