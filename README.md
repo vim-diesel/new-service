@@ -258,7 +258,7 @@ Here is where the strictest policies are set. There is no logging at this level,
 
 ## Database
 
-Migrations are done using [vim-diesel/new-darwin](https://github.com/vim-diesel/new-darwin), a database schema evolution api for Go.
+Migrations are done using [ardanlabs/darwin](https://github.com/ardanlabs/darwin), a database schema evolution api for Go.
 
 Sqlx is our abstraction layer, and pgx is our chosen driver.
 
