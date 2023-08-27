@@ -1,6 +1,6 @@
 # new-service
 
-This is built using code from [vim-diesel/new-service](https://github.com/vim-diesel/new-service)
+This is built using code from [ardanlabs/service](https://github.com/ardanlabs/service)
 
 ## Description
 
