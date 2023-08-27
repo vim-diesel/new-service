@@ -107,24 +107,8 @@ func (a *GoogAuth) ValidateGoogleJWT(tokenString string) (GoogleClaims, error) {
 	return *claims, nil
 }
 
-// Authorize attempts to authorize the user with the provided input roles, if
-// none of the input roles are within the user's claims, we return an error
-// otherwise the user is authorized.
-// func (a *Auth) Authorize(ctx context.Context, claims Claims, rule string) error {
-// 	input := map[string]any{
-// 		"Roles":   claims.Roles,
-// 		"Subject": claims.Subject,
-// 		"UserID":  claims.Subject,
-// 	}
-
-// 	if err := a.opaPolicyEvaluation(ctx, opaAuthorization, rule, input); err != nil {
-// 		return fmt.Errorf("rego evaluation failed : %w", err)
-// 	}
-
-// 	return nil
-// }
-
 // =============================================================================
+
 func getGooglePublicKey(keyID string) (string, error) {
 	resp, err := http.Get("https://www.googleapis.com/oauth2/v1/certs")
 	if err != nil {
