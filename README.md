@@ -1,6 +1,6 @@
 # new-service
 
-This is built using code from [ardanlabs/service](https://github.com/ardanlabs/service)
+This is built using code from [ardanlabs/service](https://github.com/ardanlabs/service). It's an excellent course and I would recommend it to anyone learning Go or backend engineering. 
 
 ## Description
 

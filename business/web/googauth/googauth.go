@@ -58,7 +58,7 @@ func New(cfg Config) (*GoogAuth, error) {
 }
 
 // ValidateGoogleJWT -
-func ValidateGoogleJWT(tokenString string) (GoogleClaims, error) {
+func (a *GoogAuth) ValidateGoogleJWT(tokenString string) (GoogleClaims, error) {
 	claimsStruct := GoogleClaims{}
 
 	token, err := jwt.ParseWithClaims(
@@ -85,11 +85,11 @@ func ValidateGoogleJWT(tokenString string) (GoogleClaims, error) {
 		return GoogleClaims{}, errors.New("Invalid Google JWT")
 	}
 
-	if claims.Issuer != "accounts.google.com" && claims.Issuer != "https://accounts.google.com" {
+	if claims.Issuer != a.issuer {
 		return GoogleClaims{}, errors.New("iss is invalid")
 	}
 
-	if claims.Audience != "YOUR_CLIENT_ID_HERE" {
+	if claims.Audience != a.audience {
 		return GoogleClaims{}, errors.New("aud is invalid")
 	}
 
