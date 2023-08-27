@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/vim-diesel/new-service/business/web/auth"
 	"github.com/vim-diesel/new-service/business/web/googauth"
 	"github.com/vim-diesel/new-service/foundation/web"
 )
@@ -15,7 +14,7 @@ func Authenticate(a *googauth.GoogAuth) web.Middleware {
 		h := func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
 			claims, err := a.ValidateGoogleJWT(r.Header.Get("authorization"))
 			if err != nil {
-				return auth.NewAuthError("authenticate: failed: %s", err)
+				return googauth.NewAuthError("authenticate: failed: %s", err)
 			}
 
 			ctx = googauth.SetClaims(ctx, claims)
