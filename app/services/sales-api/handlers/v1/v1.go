@@ -27,8 +27,8 @@ type Config struct {
 func Routes(app *web.App, cfg Config) {
 	const version = "v1"
 
-	app.Handle(http.MethodGet, version, "/test", testgrp.Test)
-	app.Handle(http.MethodGet, version, "/test/auth", testgrp.TestingAuth)
+	app.Handle(http.MethodGet, "/test", testgrp.Test)
+	app.Handle(http.MethodGet, "/test/auth", testgrp.TestingAuth)
 
 	// =========================================================================
 
@@ -36,5 +36,5 @@ func Routes(app *web.App, cfg Config) {
 
 	ugh := usergrp.New(usrCore)
 
-	app.Handle(http.MethodGet, version, "/users", ugh.Query)
+	app.Handle(http.MethodGet, "/users", ugh.Query)
 }
