@@ -10,6 +10,7 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -59,10 +60,16 @@ func New(cfg Config) (*GoogAuth, error) {
 
 // ValidateGoogleJWT -
 func (a *GoogAuth) ValidateGoogleJWT(tokenString string) (GoogleClaims, error) {
+
+	parts := strings.Split(tokenString, " ")
+	if len(parts) != 2 || parts[0] != "Bearer" {
+		return GoogleClaims{}, errors.New("expected authorization header format: Bearer <token>")
+	}
+
 	claimsStruct := GoogleClaims{}
 
-	token, err := jwt.ParseWithClaims(
-		tokenString,
+	token, err := a.parser.ParseWithClaims(
+		parts[1],
 		&claimsStruct,
 		func(token *jwt.Token) (interface{}, error) {
 			pem, err := getGooglePublicKey(fmt.Sprintf("%s", token.Header["kid"]))

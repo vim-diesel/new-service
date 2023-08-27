@@ -12,6 +12,7 @@ import (
 	"github.com/vim-diesel/new-service/business/core/user"
 	"github.com/vim-diesel/new-service/business/core/user/stores/userdb"
 	"github.com/vim-diesel/new-service/business/web/googauth"
+	"github.com/vim-diesel/new-service/business/web/v1/mid"
 	"github.com/vim-diesel/new-service/foundation/web"
 )
 
@@ -28,7 +29,7 @@ func Routes(app *web.App, cfg Config) {
 	const version = "v1"
 
 	app.Handle(http.MethodGet, "/test", testgrp.Test)
-	app.Handle(http.MethodGet, "/test/auth", testgrp.TestingAuth)
+	app.Handle(http.MethodGet, "/test/auth", testgrp.TestingAuth, mid.Authenticate(cfg.GoogAuth))
 
 	// =========================================================================
 
