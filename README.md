@@ -1,6 +1,6 @@
 # new-service
 
-This is built using code from [ardanlabs/service](https://github.com/ardanlabs/service). It's an excellent course and I would recommend it to anyone learning Go or backend engineering. 
+This is built using code from [ardanlabs/service](https://github.com/ardanlabs/service). It's an excellent course and I would recommend it to anyone learning Go or backend engineering.
 
 ## Description
 
@@ -8,13 +8,13 @@ This project has been modified to use [Neon.tech](https://neon.tech/) database, 
 
 Instead it will be run using a cheaper alternative such as [Fly.io](https://fly.io) or Google Cloud Run.
 
-This project is for learning and demonstration purposes only. In order for it to run on your machine you need a DSN string from Neon.tech (maybe it will work with other postgres servers), and a .env file (example provided).
+This project is for learning and demonstration purposes only. It is setup to work with Fly.io, Neon.tech, and Google JWTs. You won't find the versatility and options that you'll find in ArdanLabs service package.
 
-You can also run it using Docker, but you will need to provide the DSN string as an environment variable.
+Check the .env.example file for the environment variables you need to set.
 
-Check the options for running the service:
+Check the command line options for running the service:
 
-```
+```bash
 $ make run-help
 Usage: main [options] [arguments]
 
@@ -75,7 +75,7 @@ What follows are some general ideas and philosophies that drive the development 
 
 Taking this course allows me to learn how to write a service in Go, which will allow me to learn how to read code.
 
-"If computer people lack knowledge and understanding, then what they select will also be lacking" -Alan Kay"
+"If computer people lack knowledge and understanding, then what they select will also be lacking" -Alan Kay
 
 ## Design Philosophies
 
@@ -105,7 +105,7 @@ Prototype driven development is where we learn what the data is and the transfor
 
 The average human being cannot maintain more than 5 things in their head at once. 3 is more realistic and optimal for any average person. This project has 5 layers of depth.
 
-No code generation. Don't hide your SQL and database code
+No code generation. Don't hide your SQL and database code.
 
 No ORMs. Writing plain SQL allows us to fully debug and maintain.
 
