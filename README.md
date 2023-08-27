@@ -288,4 +288,4 @@ We kinda break this, since we use a .env file. But maybe we can still use the co
 
 We wrote our own code to validate the tokens sent by Google to our front end. You would never want to do this and always want to use auth software like OPA. But this is a learning project so it's done for educational purposes.
 
-There are two auth packages, one written by ArdanLabs, which uses OPA, and one written by me, which parses the token sent by Google without OPA.
+There are two auth packages, one written by ArdanLabs, which uses OPA, and one written by [@bootdotdev](https://twitter.com/bootdotdev), which parses the token sent by Google without OPA.
