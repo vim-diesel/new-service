@@ -10,6 +10,27 @@ Instead it will be run using a cheaper alternative such as [Fly.io](https://fly.
 
 This project is for learning and demonstration purposes only. In order for it to run on your machine you need a DSN string from Neon.tech (maybe it will work with other postgres servers), and a .env file (example provided).
 
+You can also run it using Docker, but you will need to provide the DSN string as an environment variable.
+
+Check the options for running the service:
+
+```
+$ make run-help
+Usage: main [options] [arguments]
+
+OPTIONS
+  --web-read-timeout/$SALES_WEB_READ_TIMEOUT          <duration>  (default: 10s)
+  --web-write-timeout/$SALES_WEB_WRITE_TIMEOUT        <duration>  (default: 15s)
+  --web-idle-timeout/$SALES_WEB_IDLE_TIMEOUT          <duration>  (default: 120s)
+  --web-shutdown-timeout/$SALES_WEB_SHUTDOWN_TIMEOUT  <duration>  (default: 20s)
+  --web-api-host/$SALES_WEB_API_HOST                  <string>    (default: 0.0.0.0:3000)
+  --web-debug-host/$SALES_WEB_DEBUG_HOST              <string>    (default: 0.0.0.0:4000)
+  --help/-h
+  display this help message
+  --version/-v
+  display version information
+```
+
 What follows are some general ideas and philosophies that drive the development of this service.
 
 ## Aspirations for this course
