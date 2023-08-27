@@ -122,7 +122,6 @@ func run(ctx context.Context, log *slog.Logger) error {
 
 	googAuthCfg := googauth.Config{
 		Log:      log,
-		Issuer:   "https://accounts.google.com",
 		Audience: audience,
 	}
 

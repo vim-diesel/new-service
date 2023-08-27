@@ -31,7 +31,6 @@ type GoogleClaims struct {
 // Config represents information required to initialize auth.
 type Config struct {
 	Log      *slog.Logger
-	Issuer   string
 	Audience string
 }
 
@@ -41,7 +40,6 @@ type GoogAuth struct {
 	log      *slog.Logger
 	method   jwt.SigningMethod
 	parser   *jwt.Parser
-	issuer   string
 	audience string
 }
 
@@ -51,7 +49,6 @@ func New(cfg Config) (*GoogAuth, error) {
 		log:      cfg.Log,
 		method:   jwt.GetSigningMethod(jwt.SigningMethodRS256.Name),
 		parser:   jwt.NewParser(jwt.WithValidMethods([]string{jwt.SigningMethodRS256.Name})),
-		issuer:   cfg.Issuer,
 		audience: cfg.Audience,
 	}
 
@@ -92,7 +89,7 @@ func (a *GoogAuth) ValidateGoogleJWT(tokenString string) (GoogleClaims, error) {
 		return GoogleClaims{}, errors.New("Invalid Google JWT")
 	}
 
-	if claims.Issuer != a.issuer {
+	if claims.Issuer != "accounts.google.com" && claims.Issuer != "https://accounts.google.com" {
 		return GoogleClaims{}, errors.New("iss is invalid")
 	}
 
