@@ -1,22 +1,33 @@
 package main
 
 import (
-	"context"
-	"log/slog"
-	"os"
+	"fmt"
+	"log"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func main() {
-	log := slog.Default()
-	ctx := context.Background()
-
-	if err := run(ctx, log); err != nil {
-		log.ErrorContext(ctx, "startup", "msg", err)
-		os.Exit(1)
+	if err := run(); err != nil {
+		log.Fatalln(err)
 	}
 }
 
-func run(ctx context.Context, log *slog.Logger) error {
+func run() error {
+
+	pass, err := bcrypt.GenerateFromPassword([]byte("adminpass"), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(string(pass))
+
+	pass, err = bcrypt.GenerateFromPassword([]byte("userpass"), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(string(pass))
 
 	return nil
 }

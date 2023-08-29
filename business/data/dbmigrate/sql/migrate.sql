@@ -10,7 +10,6 @@ CREATE TABLE users (
     enabled       BOOLEAN     NOT NULL,
 	date_created  TIMESTAMP   NOT NULL,
 	date_updated  TIMESTAMP   NOT NULL,
-
 	PRIMARY KEY (user_id)
 );
 

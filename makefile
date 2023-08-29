@@ -32,5 +32,8 @@ load:
 load-small:
 	hey -m GET -c 25 -n 10000 https://new-service.fly.dev/users?page=1&rows=2
 
-npm-vite:
-	pnpm --prefix ./app/frontends/test-goog run dev
+run-dev:
+	pnpm --prefix ./app/frontends/test-basic run dev
+
+run-scratch:
+	go run app/scratch/main.go
