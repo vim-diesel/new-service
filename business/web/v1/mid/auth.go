@@ -4,29 +4,40 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/vim-diesel/new-service/business/web/googauth"
+	"github.com/vim-diesel/new-service/business/web/clerkauth"
 	"github.com/vim-diesel/new-service/foundation/web"
 )
 
-// Authenticate validates a JWT from the `Authorization` header.
-func Authenticate(a *googauth.GoogAuth) web.Middleware {
+func Authenticate(a *clerkauth.ClerkAuth) web.Middleware {
 	m := func(handler web.Handler) web.Handler {
 		h := func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
-			claims, err := a.ValidateGoogleJWT(r.Header.Get("authorization"))
-			if err != nil {
-				return googauth.NewAuthError("authenticate: failed: %s", err)
-			}
-
-			ctx = googauth.SetClaims(ctx, claims)
 
 			return handler(ctx, w, r)
 		}
-
 		return h
 	}
-
 	return m
 }
+
+// Authenticate validates a JWT from the `Authorization` header.
+// func Authenticate(a *googauth.GoogAuth) web.Middleware {
+// 	m := func(handler web.Handler) web.Handler {
+// 		h := func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
+// 			claims, err := a.ValidateGoogleJWT(r.Header.Get("authorization"))
+// 			if err != nil {
+// 				return googauth.NewAuthError("authenticate: failed: %s", err)
+// 			}
+
+// 			ctx = googauth.SetClaims(ctx, claims)
+
+// 			return handler(ctx, w, r)
+// 		}
+
+// 		return h
+// 	}
+
+// 	return m
+// }
 
 // Authorize validates that an authenticated user has at least one role from a
 // specified list. This method constructs the actual function that is used.

@@ -4,6 +4,9 @@ run:
 run-help:
 	go run app/services/sales-api/main.go --help
 
+run-scratch:
+	go run app/scratch/main.go
+
 tidy:
 	go mod tidy
 	go mod vendor
@@ -35,5 +38,3 @@ load-small:
 run-dev:
 	pnpm --prefix ./app/frontends/test-basic run dev
 
-run-scratch:
-	go run app/scratch/main.go

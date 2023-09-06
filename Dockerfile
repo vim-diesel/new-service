@@ -23,6 +23,7 @@ RUN addgroup -g 1000 -S sales && \
     adduser -u 1000 -h /service -G sales -S sales
 COPY --from=build_sales-api --chown=sales:sales /service/app/services/sales-api/sales-api /service/sales-api
 COPY --from=build_sales-api --chown=sales:sales /service/.env /service/.env
+COPY --from=build_sales-api --chown=sales:sales /service/key.pem /service/key.pem
 
 EXPOSE 3000
 
