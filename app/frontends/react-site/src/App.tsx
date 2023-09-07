@@ -54,7 +54,6 @@ function App() {
           <Separator className='my-4' />
           <Button>Add city</Button>
           <Separator className='my-4' />
-          <div>Hello from clerk</div>
           <Example />
           <Separator className='my-4' />
           <Home />

@@ -8,7 +8,11 @@ export default function Home() {
   }
 
   if (isSignedIn) {
-    return <div>Hello {user.fullName}!</div>;
+    return (
+      <>
+        <div>Hello {user.firstName}!</div>
+      </>
+    );
   }
 
   return <div>Not signed in</div>;

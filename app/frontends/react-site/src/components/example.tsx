@@ -7,16 +7,15 @@ export default function Example() {
   const handleClick = async () => {
     const res = await fetch('https://new-service.fly.dev/test/auth', {
       headers: { Authorization: `Bearer ${await getToken()}` },
-    });
-    if (!res.ok) {
-      throw new Error('Network response error');
-    }
-    console.log(res.statusText);
+    })
+      .then((res) => res.json())
+      .catch((err) => console.log(err));
+    console.log(res);
   };
 
   // In case the user signs out while on the page.
   if (!isLoaded || !userId) {
-    return null;
+    return <h4>Loading...</h4>;
   }
 
   getToken().then((token) => {
