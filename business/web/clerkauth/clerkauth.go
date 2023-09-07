@@ -77,7 +77,7 @@ func (a *ClerkAuth) ValidateClerkJWT(ctx context.Context, tokenString string) (C
 		return ClerkClaims{}, errors.New("iss is invalid")
 	}
 
-	if claims.AuthorizedParty != "http://localhost:5173" {
+	if claims.AuthorizedParty != "http://localhost:5173" && claims.AuthorizedParty != "https://new-service.vercel.app" {
 		return ClerkClaims{}, errors.New("azp is invalid")
 	}
 
