@@ -11,7 +11,12 @@ import (
 func Authenticate(a *clerkauth.ClerkAuth) web.Middleware {
 	m := func(handler web.Handler) web.Handler {
 		h := func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
+			claims, err := a.ValidateClerkJWT(ctx, r.Header.Get("authorization"))
+			if err != nil {
+				return clerkauth.NewAuthError("authenticate: failed: %s", err)
+			}
 
+			ctx = clerkauth.SetClaims(ctx, claims)
 			return handler(ctx, w, r)
 		}
 		return h

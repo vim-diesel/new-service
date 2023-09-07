@@ -1,6 +1,7 @@
 package clerkauth
 
 import (
+	"context"
 	"crypto/rsa"
 	"errors"
 	"fmt"
@@ -45,7 +46,7 @@ func New(cfg Config) (*ClerkAuth, error) {
 }
 
 // ValidateGoogleJWT -
-func (a *ClerkAuth) ValidateClerkJWT(tokenString string) (ClerkClaims, error) {
+func (a *ClerkAuth) ValidateClerkJWT(ctx context.Context, tokenString string) (ClerkClaims, error) {
 
 	parts := strings.Split(tokenString, " ")
 	if len(parts) != 2 || parts[0] != "Bearer" {
