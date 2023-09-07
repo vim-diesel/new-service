@@ -11,17 +11,17 @@ import (
 	"github.com/vim-diesel/new-service/app/services/sales-api/handlers/v1/usergrp"
 	"github.com/vim-diesel/new-service/business/core/user"
 	"github.com/vim-diesel/new-service/business/core/user/stores/userdb"
-	"github.com/vim-diesel/new-service/business/web/googauth"
+	"github.com/vim-diesel/new-service/business/web/clerkauth"
 	"github.com/vim-diesel/new-service/business/web/v1/mid"
 	"github.com/vim-diesel/new-service/foundation/web"
 )
 
 // Config contains all the mandatory systems required by handlers.
 type Config struct {
-	Build    string
-	Log      *slog.Logger
-	GoogAuth *googauth.GoogAuth
-	DB       *sqlx.DB
+	Build     string
+	Log       *slog.Logger
+	ClerkAuth *clerkauth.ClerkAuth
+	DB        *sqlx.DB
 }
 
 // Routes binds all the version 1 routes.
@@ -29,7 +29,7 @@ func Routes(app *web.App, cfg Config) {
 	const version = "v1"
 
 	app.Handle(http.MethodGet, "/test", testgrp.Test)
-	app.Handle(http.MethodGet, "/test/auth", testgrp.TestingAuth, mid.Authenticate(cfg.GoogAuth))
+	app.Handle(http.MethodGet, "/test/auth", testgrp.TestingAuth, mid.Authenticate(cfg.ClerkAuth))
 
 	// =========================================================================
 

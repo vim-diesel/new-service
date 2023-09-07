@@ -5,7 +5,6 @@ go 1.21.0
 require (
 	github.com/ardanlabs/conf/v3 v3.1.6
 	github.com/ardanlabs/darwin/v3 v3.3.0
-	github.com/clerkinc/clerk-sdk-go v1.48.1
 	github.com/dimfeld/httptreemux/v5 v5.5.0
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
@@ -20,7 +19,6 @@ require (
 
 require (
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
-	github.com/go-jose/go-jose/v3 v3.0.0 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect

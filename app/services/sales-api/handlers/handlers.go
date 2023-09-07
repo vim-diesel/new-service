@@ -8,7 +8,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	v1 "github.com/vim-diesel/new-service/app/services/sales-api/handlers/v1"
-	"github.com/vim-diesel/new-service/business/web/googauth"
+	"github.com/vim-diesel/new-service/business/web/clerkauth"
 	"github.com/vim-diesel/new-service/business/web/v1/mid"
 	"github.com/vim-diesel/new-service/foundation/web"
 )
@@ -27,11 +27,11 @@ func WithCORS(origin string) func(opts *Options) {
 
 // APIMuxConfig contains all the mandatory systems required by handlers.
 type APIMuxConfig struct {
-	Build    string
-	Shutdown chan os.Signal
-	Log      *slog.Logger
-	DB       *sqlx.DB
-	GoogAuth *googauth.GoogAuth
+	Build     string
+	Shutdown  chan os.Signal
+	Log       *slog.Logger
+	DB        *sqlx.DB
+	ClerkAuth *clerkauth.ClerkAuth
 }
 
 // APIMux constructs a http.Handler with all application routes defined.
@@ -53,10 +53,10 @@ func APIMux(cfg APIMuxConfig, options ...func(opts *Options)) http.Handler {
 	}
 
 	v1.Routes(app, v1.Config{
-		Build:    cfg.Build,
-		Log:      cfg.Log,
-		GoogAuth: cfg.GoogAuth,
-		DB:       cfg.DB,
+		Build:     cfg.Build,
+		Log:       cfg.Log,
+		ClerkAuth: cfg.ClerkAuth,
+		DB:        cfg.DB,
 	})
 
 	return app

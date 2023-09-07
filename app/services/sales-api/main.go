@@ -19,7 +19,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/vim-diesel/new-service/app/services/sales-api/handlers"
 	database "github.com/vim-diesel/new-service/business/sys/database/pgx"
-	"github.com/vim-diesel/new-service/business/web/googauth"
+	"github.com/vim-diesel/new-service/business/web/clerkauth"
 	"github.com/vim-diesel/new-service/business/web/v1/debug"
 )
 
@@ -55,7 +55,6 @@ func run(ctx context.Context, log *slog.Logger) error {
 	}
 
 	dsn := os.Getenv("DSN")
-	audience := os.Getenv("GOOGLE_OAUTH_CLIENT_ID")
 
 	cfg := struct {
 		conf.Version
@@ -120,12 +119,11 @@ func run(ctx context.Context, log *slog.Logger) error {
 
 	log.InfoContext(ctx, "startup", "status", "initializing authentication support")
 
-	googAuthCfg := googauth.Config{
-		Log:      log,
-		Audience: audience,
+	clerkAuthCfg := clerkauth.Config{
+		Log: log,
 	}
 
-	googAuth, err := googauth.New(googAuthCfg)
+	clerkAuth, err := clerkauth.New(clerkAuthCfg)
 	if err != nil {
 		return fmt.Errorf("constructing auth: %w", err)
 	}
@@ -150,11 +148,11 @@ func run(ctx context.Context, log *slog.Logger) error {
 	signal.Notify(shutdown, syscall.SIGINT, syscall.SIGTERM)
 
 	cfgMux := handlers.APIMuxConfig{
-		Build:    build,
-		Shutdown: shutdown,
-		Log:      log,
-		DB:       db,
-		GoogAuth: googAuth,
+		Build:     build,
+		Shutdown:  shutdown,
+		Log:       log,
+		DB:        db,
+		ClerkAuth: clerkAuth,
 	}
 	apiMux := handlers.APIMux(cfgMux, handlers.WithCORS("*"))
 

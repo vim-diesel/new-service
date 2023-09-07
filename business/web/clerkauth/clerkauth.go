@@ -1,16 +1,14 @@
 package clerkauth
 
 import (
-	"encoding/json"
+	"crypto/rsa"
 	"errors"
 	"fmt"
 	"io"
 	"log/slog"
-	"net/http"
+	"os"
 	"strings"
-	"time"
 
-	"github.com/clerkinc/clerk-sdk-go/clerk"
 	"github.com/golang-jwt/jwt/v4"
 )
 
@@ -18,26 +16,29 @@ import (
 var ErrForbidden = errors.New("attempted action is not allowed")
 
 type ClerkClaims struct {
+	AuthorizedParty string `json:"azp,omitempty"`
+	SessionID       string `json:"sid,omitempty"`
 	jwt.StandardClaims
 }
 
 // Config represents information required to initialize auth.
 type Config struct {
-	Log    *slog.Logger
-	Client *clerk.Client
+	Log *slog.Logger
 }
 
 // Auth is used to authenticate clients.
 type ClerkAuth struct {
 	log    *slog.Logger
-	client *clerk.Client
+	method jwt.SigningMethod
+	parser *jwt.Parser
 }
 
 // New creates an ClerkAuth to support authentication.
 func New(cfg Config) (*ClerkAuth, error) {
 	a := ClerkAuth{
 		log:    cfg.Log,
-		client: cfg.Client,
+		method: jwt.GetSigningMethod(jwt.SigningMethodRS256.Name),
+		parser: jwt.NewParser(jwt.WithValidMethods([]string{jwt.SigningMethodRS256.Name})),
 	}
 
 	return &a, nil
@@ -57,11 +58,7 @@ func (a *ClerkAuth) ValidateClerkJWT(tokenString string) (ClerkClaims, error) {
 		parts[1],
 		&claimsStruct,
 		func(token *jwt.Token) (interface{}, error) {
-			pem, err := getGooglePublicKey(fmt.Sprintf("%s", token.Header["kid"]))
-			if err != nil {
-				return nil, err
-			}
-			key, err := jwt.ParseRSAPublicKeyFromPEM([]byte(pem))
+			key, err := getClerkPubKey()
 			if err != nil {
 				return nil, err
 			}
@@ -74,19 +71,15 @@ func (a *ClerkAuth) ValidateClerkJWT(tokenString string) (ClerkClaims, error) {
 
 	claims, ok := token.Claims.(*ClerkClaims)
 	if !ok {
-		return ClerkClaims{}, errors.New("Invalid Google JWT")
+		return ClerkClaims{}, errors.New("Invalid Clerk JWT")
 	}
 
-	if claims.Issuer != "accounts.google.com" && claims.Issuer != "https://accounts.google.com" {
+	if claims.Issuer != "https://smiling-tomcat-48.clerk.accounts.dev" {
 		return ClerkClaims{}, errors.New("iss is invalid")
 	}
 
-	if claims.Audience != a.audience {
-		return ClerkClaims{}, errors.New("aud is invalid")
-	}
-
-	if claims.ExpiresAt < time.Now().UTC().Unix() {
-		return ClerkClaims{}, errors.New("JWT is expired")
+	if claims.AuthorizedParty != "http://localhost:5173" {
+		return ClerkClaims{}, errors.New("azp is invalid")
 	}
 
 	return *claims, nil
@@ -94,56 +87,24 @@ func (a *ClerkAuth) ValidateClerkJWT(tokenString string) (ClerkClaims, error) {
 
 // =============================================================================
 
-func getGooglePublicKey(keyID string) (string, error) {
-	resp, err := http.Get("https://smiling-tomcat-48.clerk.accounts.dev/.well-known/jwks.json")
+func getClerkPubKey() (*rsa.PublicKey, error) {
+	file, err := os.Open("key.pem")
+
 	if err != nil {
-		return "", err
-	}
-	dat, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", err
+		return nil, fmt.Errorf("reading opening file: %w", err)
 	}
 
-	myResp := map[string]string{}
-	err = json.Unmarshal(dat, &myResp)
+	defer file.Close()
+
+	pemData, err := io.ReadAll(io.LimitReader(file, 1024*1024))
 	if err != nil {
-		return "", err
+		return nil, fmt.Errorf("reading auth public key: %w", err)
 	}
-	key, ok := myResp[keyID]
-	if !ok {
-		return "", errors.New("key not found")
+
+	publicKey, err := jwt.ParseRSAPublicKeyFromPEM(pemData)
+	if err != nil {
+		return nil, fmt.Errorf("parsing auth public key: %w", err)
 	}
-	return key, nil
+
+	return publicKey, nil
 }
-
-// func getClerkPubKey() (*rsa.PublicKey, error) {
-
-// 	ctx := context.Background()
-// 	// Fetch the JWK from the URL
-// 	set, err := jwk.Fetch(ctx, "https://smiling-tomcat-48.clerk.accounts.dev/.well-known/jwks.json")
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	fmt.Println(set)
-
-// 	var rsa *rsa.PublicKey
-
-// 	for it := set.Iterate(context.Background()); it.Next(context.Background()); {
-// 		pair := it.Pair()
-// 		key := pair.Value.(jwk.Key)
-
-// 		var rawkey interface{} // This is the raw key, like *rsa.PrivateKey or *ecdsa.PrivateKey
-// 		if err := key.Raw(&rawkey); err != nil {
-// 			log.Printf("failed to create public key: %s", err)
-// 			return nil, err
-// 		}
-
-// 		// We know this is an RSA Key so...
-// 		rsa, ok := &rawkey.(*rsa.PublicKey)
-// 		if !ok {
-// 			panic(fmt.Sprintf("expected ras key, got %T", rawkey))
-// 		}
-// 	}
-// 	return rsa, nil
-// }
