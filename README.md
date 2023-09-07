@@ -45,6 +45,8 @@ What follows are some general ideas and philosophies that drive the development 
 
 - Have a strong mental model of the codebase. Debuggers just run code in slow motion. The real debugging comes from having a strong mental model and knowing what is happening when you inspect the logs.
 
+- Deploy First Mentality. When working in dev mode, we start with making sure we can deploy properly and continue to deploy frequently when working. This avoids any issues that might arise when we are ready to deploy to production.
+
 ## Why Go?
 
 - Readability as a first principle.

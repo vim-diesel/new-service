@@ -30,7 +30,6 @@ type Config struct {
 // Auth is used to authenticate clients.
 type ClerkAuth struct {
 	log    *slog.Logger
-	method jwt.SigningMethod
 	parser *jwt.Parser
 }
 
@@ -38,7 +37,6 @@ type ClerkAuth struct {
 func New(cfg Config) (*ClerkAuth, error) {
 	a := ClerkAuth{
 		log:    cfg.Log,
-		method: jwt.GetSigningMethod(jwt.SigningMethodRS256.Name),
 		parser: jwt.NewParser(jwt.WithValidMethods([]string{jwt.SigningMethodRS256.Name})),
 	}
 

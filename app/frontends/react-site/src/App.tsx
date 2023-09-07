@@ -17,10 +17,6 @@ if (!import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY) {
 const clerkPubKey = import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY;
 
 function App() {
-  const handleClick = () => {
-    console.log(clerkPubKey);
-  };
-
   return (
     <>
       <ClerkProvider publishableKey={clerkPubKey}>
@@ -56,7 +52,7 @@ function App() {
             </div>
           </div>
           <Separator className='my-4' />
-          <Button onClick={handleClick}>Add city</Button>
+          <Button>Add city</Button>
           <Separator className='my-4' />
           <div>Hello from clerk</div>
           <Example />
