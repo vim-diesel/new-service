@@ -2,3 +2,7 @@
 .gitignore
 makefile
 README.md
+app/frontends/**/*
+app/frontends
+app/frontends/
+**/node_modules

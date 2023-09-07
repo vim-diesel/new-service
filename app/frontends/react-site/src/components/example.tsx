@@ -5,7 +5,7 @@ export default function Example() {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
 
   const handleClick = async () => {
-    const res = await fetch('http://localhost:3000/test/auth', {
+    const res = await fetch('https://new-service.fly.dev/test/auth', {
       headers: { Authorization: `Bearer ${await getToken()}` },
     });
     if (!res.ok) {
