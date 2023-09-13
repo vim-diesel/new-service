@@ -1,7 +1,7 @@
 -- Version: 1.01
 -- Description: Create table users
 CREATE TABLE "users" (
-  "user_id" text PRIMARY KEY,
+  "user_id" text PRIMARY KEY UNIQUE,
   "full_name" text,
   "first_name" text,
   "last_name" text,

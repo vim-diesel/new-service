@@ -40,6 +40,7 @@ func toAppUser(usr user.User) AppUser {
 
 // AppNewUser contains information needed to create a new user.
 type AppNewUser struct {
+	SubjectID string `json:"subjectID" validate:"required"`
 	FullName  string `json:"fullName" validate:"required"`
 	FirstName string `json:"firstName" validate:"required"`
 	LastName  string `json:"lastName" validate:"required"`
@@ -54,6 +55,7 @@ func toCoreNewUser(app AppNewUser) (user.NewUser, error) {
 	}
 
 	usr := user.NewUser{
+		SubjectID: app.SubjectID,
 		FullName:  app.FullName,
 		FirstName: app.FirstName,
 		LastName:  app.LastName,
