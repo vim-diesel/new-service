@@ -38,4 +38,5 @@ func Routes(app *web.App, cfg Config) {
 	ugh := usergrp.New(usrCore)
 
 	app.Handle(http.MethodGet, "/users", ugh.Query)
+	app.Handle(http.MethodPost, "/users/create", ugh.Create)
 }

@@ -9,8 +9,7 @@ var DefaultOrderBy = order.NewBy(OrderByID, order.ASC)
 // that should be used by the application layer.
 const (
 	OrderByID      = "userid"
-	OrderByName    = "name"
+	OrderByName    = "fullname"
 	OrderByEmail   = "email"
-	OrderByRoles   = "roles"
 	OrderByEnabled = "enabled"
 )

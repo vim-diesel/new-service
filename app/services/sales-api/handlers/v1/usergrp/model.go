@@ -14,33 +14,25 @@ import (
 
 // AppUser represents information about an individual user.
 type AppUser struct {
-	ID           string   `json:"id"`
-	Name         string   `json:"name"`
-	Email        string   `json:"email"`
-	Roles        []string `json:"roles"`
-	PasswordHash []byte   `json:"-"`
-	Department   string   `json:"department"`
-	Enabled      bool     `json:"enabled"`
-	DateCreated  string   `json:"dateCreated"`
-	DateUpdated  string   `json:"dateUpdated"`
+	ID        string `json:"id"`
+	FullName  string `json:"fullName"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Email     string `json:"email"`
+	Enabled   bool   `json:"enabled"`
+	CreatedAt string `json:"createdAt"`
 }
 
 func toAppUser(usr user.User) AppUser {
-	roles := make([]string, len(usr.Roles))
-	for i, role := range usr.Roles {
-		roles[i] = role.Name()
-	}
 
 	return AppUser{
-		ID:           usr.ID.String(),
-		Name:         usr.Name,
-		Email:        usr.Email.Address,
-		Roles:        roles,
-		PasswordHash: usr.PasswordHash,
-		Department:   usr.Department,
-		Enabled:      usr.Enabled,
-		DateCreated:  usr.DateCreated.Format(time.RFC3339),
-		DateUpdated:  usr.DateUpdated.Format(time.RFC3339),
+		ID:        usr.ID,
+		FullName:  usr.FullName,
+		FirstName: usr.FirstName,
+		LastName:  usr.LastName,
+		Email:     usr.Email.Address,
+		Enabled:   usr.Enabled,
+		CreatedAt: usr.CreatedAt.Format(time.RFC3339),
 	}
 }
 
@@ -48,23 +40,13 @@ func toAppUser(usr user.User) AppUser {
 
 // AppNewUser contains information needed to create a new user.
 type AppNewUser struct {
-	Name            string   `json:"name" validate:"required"`
-	Email           string   `json:"email" validate:"required,email"`
-	Roles           []string `json:"roles" validate:"required"`
-	Department      string   `json:"department"`
-	Password        string   `json:"password" validate:"required"`
-	PasswordConfirm string   `json:"passwordConfirm" validate:"eqfield=Password"`
+	FullName  string `json:"fullName" validate:"required"`
+	FirstName string `json:"firstName" validate:"required"`
+	LastName  string `json:"lastName" validate:"required"`
+	Email     string `json:"email" validate:"required,email"`
 }
 
 func toCoreNewUser(app AppNewUser) (user.NewUser, error) {
-	roles := make([]user.Role, len(app.Roles))
-	for i, roleStr := range app.Roles {
-		role, err := user.ParseRole(roleStr)
-		if err != nil {
-			return user.NewUser{}, fmt.Errorf("parsing role: %w", err)
-		}
-		roles[i] = role
-	}
 
 	addr, err := mail.ParseAddress(app.Email)
 	if err != nil {
@@ -72,12 +54,10 @@ func toCoreNewUser(app AppNewUser) (user.NewUser, error) {
 	}
 
 	usr := user.NewUser{
-		Name:            app.Name,
-		Email:           *addr,
-		Roles:           roles,
-		Department:      app.Department,
-		Password:        app.Password,
-		PasswordConfirm: app.PasswordConfirm,
+		FullName:  app.FullName,
+		FirstName: app.FirstName,
+		LastName:  app.LastName,
+		Email:     *addr,
 	}
 
 	return usr, nil
@@ -95,27 +75,14 @@ func (app AppNewUser) Validate() error {
 
 // AppUpdateUser contains information needed to update a user.
 type AppUpdateUser struct {
-	Name            *string  `json:"name"`
-	Email           *string  `json:"email" validate:"omitempty,email"`
-	Roles           []string `json:"roles"`
-	Department      *string  `json:"department"`
-	Password        *string  `json:"password"`
-	PasswordConfirm *string  `json:"passwordConfirm" validate:"omitempty,eqfield=Password"`
-	Enabled         *bool    `json:"enabled"`
+	FullName  *string `json:"fullName"`
+	FirstName *string `json:"firstName"`
+	LastName  *string `json:"lastName"`
+	Email     *string `json:"email" validate:"omitempty,email"`
+	Enabled   *bool   `json:"enabled"`
 }
 
 func toCoreUpdateUser(app AppUpdateUser) (user.UpdateUser, error) {
-	var roles []user.Role
-	if app.Roles != nil {
-		roles = make([]user.Role, len(app.Roles))
-		for i, roleStr := range app.Roles {
-			role, err := user.ParseRole(roleStr)
-			if err != nil {
-				return user.UpdateUser{}, fmt.Errorf("parsing role: %w", err)
-			}
-			roles[i] = role
-		}
-	}
 
 	var addr *mail.Address
 	if app.Email != nil {
@@ -127,13 +94,11 @@ func toCoreUpdateUser(app AppUpdateUser) (user.UpdateUser, error) {
 	}
 
 	nu := user.UpdateUser{
-		Name:            app.Name,
-		Email:           addr,
-		Roles:           roles,
-		Department:      app.Department,
-		Password:        app.Password,
-		PasswordConfirm: app.PasswordConfirm,
-		Enabled:         app.Enabled,
+		FullName:  app.FullName,
+		FirstName: app.FirstName,
+		LastName:  app.LastName,
+		Email:     addr,
+		Enabled:   app.Enabled,
 	}
 
 	return nu, nil
@@ -151,10 +116,9 @@ func (app AppUpdateUser) Validate() error {
 
 // AppSummary represents information about an individual user and their products.
 type AppSummary struct {
-	UserID     string  `json:"userID"`
-	UserName   string  `json:"userName"`
-	TotalCount int     `json:"totalCount"`
-	TotalCost  float64 `json:"totalCost"`
+	UserID     string `json:"userID"`
+	UserName   string `json:"userName"`
+	TotalCount int    `json:"totalCount"`
 }
 
 func toAppSummary(smm summary.Summary) AppSummary {
@@ -162,6 +126,5 @@ func toAppSummary(smm summary.Summary) AppSummary {
 		UserID:     smm.UserID.String(),
 		UserName:   smm.UserName,
 		TotalCount: smm.TotalCount,
-		TotalCost:  smm.TotalCost,
 	}
 }

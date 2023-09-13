@@ -12,7 +12,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/vim-diesel/new-service/business/data/order"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // Set of error variables for CRUD operations.
@@ -49,23 +48,17 @@ func NewCore(storer Storer) *Core {
 
 // Create inserts a new user into the database.
 func (c *Core) Create(ctx context.Context, nu NewUser) (User, error) {
-	hash, err := bcrypt.GenerateFromPassword([]byte(nu.Password), bcrypt.DefaultCost)
-	if err != nil {
-		return User{}, fmt.Errorf("generatefrompassword: %w", err)
-	}
 
 	now := time.Now()
 
 	usr := User{
-		ID:           uuid.New(),
-		Name:         nu.Name,
-		Email:        nu.Email,
-		PasswordHash: hash,
-		Roles:        nu.Roles,
-		Department:   nu.Department,
-		Enabled:      true,
-		DateCreated:  now,
-		DateUpdated:  now,
+		ID:        nu.SubjectID,
+		FullName:  nu.FullName,
+		FirstName: nu.FirstName,
+		LastName:  nu.LastName,
+		Email:     nu.Email,
+		Enabled:   true,
+		CreatedAt: now,
 	}
 
 	if err := c.storer.Create(ctx, usr); err != nil {
@@ -77,29 +70,21 @@ func (c *Core) Create(ctx context.Context, nu NewUser) (User, error) {
 
 // Update replaces a user document in the database.
 func (c *Core) Update(ctx context.Context, usr User, uu UpdateUser) (User, error) {
-	if uu.Name != nil {
-		usr.Name = *uu.Name
+	if uu.FullName != nil {
+		usr.FullName = *uu.FullName
 	}
 	if uu.Email != nil {
 		usr.Email = *uu.Email
 	}
-	if uu.Roles != nil {
-		usr.Roles = uu.Roles
+	if uu.FirstName != nil {
+		usr.FirstName = *uu.FirstName
 	}
-	if uu.Password != nil {
-		pw, err := bcrypt.GenerateFromPassword([]byte(*uu.Password), bcrypt.DefaultCost)
-		if err != nil {
-			return User{}, fmt.Errorf("generatefrompassword: %w", err)
-		}
-		usr.PasswordHash = pw
-	}
-	if uu.Department != nil {
-		usr.Department = *uu.Department
+	if uu.LastName != nil {
+		usr.LastName = *uu.LastName
 	}
 	if uu.Enabled != nil {
 		usr.Enabled = *uu.Enabled
 	}
-	usr.DateUpdated = time.Now()
 
 	if err := c.storer.Update(ctx, usr); err != nil {
 		return User{}, fmt.Errorf("update: %w", err)
@@ -167,15 +152,15 @@ func (c *Core) QueryByEmail(ctx context.Context, email mail.Address) (User, erro
 // Authenticate finds a user by their email and verifies their password. On
 // success it returns a Claims User representing this user. The claims can be
 // used to generate a token for future authentication.
-func (c *Core) Authenticate(ctx context.Context, email mail.Address, password string) (User, error) {
-	usr, err := c.QueryByEmail(ctx, email)
-	if err != nil {
-		return User{}, fmt.Errorf("query: email[%s]: %w", email, err)
-	}
+// func (c *Core) Authenticate(ctx context.Context, email mail.Address, password string) (User, error) {
+// 	usr, err := c.QueryByEmail(ctx, email)
+// 	if err != nil {
+// 		return User{}, fmt.Errorf("query: email[%s]: %w", email, err)
+// 	}
 
-	if err := bcrypt.CompareHashAndPassword(usr.PasswordHash, []byte(password)); err != nil {
-		return User{}, fmt.Errorf("comparehashandpassword: %w", ErrAuthenticationFailure)
-	}
+// 	if err := bcrypt.CompareHashAndPassword(usr.PasswordHash, []byte(password)); err != nil {
+// 		return User{}, fmt.Errorf("comparehashandpassword: %w", ErrAuthenticationFailure)
+// 	}
 
-	return usr, nil
-}
+// 	return usr, nil
+// }

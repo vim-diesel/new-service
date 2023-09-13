@@ -1,48 +1,34 @@
 package userdb
 
 import (
-	"database/sql"
 	"net/mail"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/vim-diesel/new-service/business/core/user"
-	"github.com/vim-diesel/new-service/business/sys/database/pgx/dbarray"
 )
 
 // dbUser represent the structure we need for moving data
 // between the app and the database.
 type dbUser struct {
-	ID           uuid.UUID      `db:"user_id"`
-	Name         string         `db:"name"`
-	Email        string         `db:"email"`
-	Roles        dbarray.String `db:"roles"`
-	PasswordHash []byte         `db:"password_hash"`
-	Enabled      bool           `db:"enabled"`
-	Department   sql.NullString `db:"department"`
-	DateCreated  time.Time      `db:"date_created"`
-	DateUpdated  time.Time      `db:"date_updated"`
+	ID        string    `db:"user_id"`
+	FullName  string    `db:"full_name"`
+	FirstName string    `db:"first_name"`
+	LastName  string    `db:"last_name"`
+	Email     string    `db:"email"`
+	Enabled   bool      `db:"enabled"`
+	CreatedAt time.Time `db:"created_at"`
 }
 
 func toDBUser(usr user.User) dbUser {
-	roles := make([]string, len(usr.Roles))
-	for i, role := range usr.Roles {
-		roles[i] = role.Name()
-	}
 
 	return dbUser{
-		ID:           usr.ID,
-		Name:         usr.Name,
-		Email:        usr.Email.Address,
-		Roles:        roles,
-		PasswordHash: usr.PasswordHash,
-		Department: sql.NullString{
-			String: usr.Department,
-			Valid:  usr.Department != "",
-		},
-		Enabled:     usr.Enabled,
-		DateCreated: usr.DateCreated.UTC(),
-		DateUpdated: usr.DateUpdated.UTC(),
+		ID:        usr.ID,
+		FullName:  usr.FullName,
+		FirstName: usr.FirstName,
+		LastName:  usr.LastName,
+		Email:     usr.Email.Address,
+		Enabled:   usr.Enabled,
+		CreatedAt: usr.CreatedAt.UTC(),
 	}
 }
 
@@ -51,21 +37,14 @@ func toCoreUser(dbUsr dbUser) user.User {
 		Address: dbUsr.Email,
 	}
 
-	roles := make([]user.Role, len(dbUsr.Roles))
-	for i, value := range dbUsr.Roles {
-		roles[i] = user.MustParseRole(value)
-	}
-
 	usr := user.User{
-		ID:           dbUsr.ID,
-		Name:         dbUsr.Name,
-		Email:        addr,
-		Roles:        roles,
-		PasswordHash: dbUsr.PasswordHash,
-		Enabled:      dbUsr.Enabled,
-		Department:   dbUsr.Department.String,
-		DateCreated:  dbUsr.DateCreated.In(time.Local),
-		DateUpdated:  dbUsr.DateUpdated.In(time.Local),
+		ID:        dbUsr.ID,
+		FullName:  dbUsr.FullName,
+		FirstName: dbUsr.FirstName,
+		LastName:  dbUsr.LastName,
+		Email:     addr,
+		Enabled:   dbUsr.Enabled,
+		CreatedAt: dbUsr.CreatedAt.In(time.Local),
 	}
 
 	return usr

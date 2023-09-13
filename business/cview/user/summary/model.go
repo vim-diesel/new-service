@@ -7,5 +7,4 @@ type Summary struct {
 	UserID     uuid.UUID
 	UserName   string
 	TotalCount int
-	TotalCost  float64
 }

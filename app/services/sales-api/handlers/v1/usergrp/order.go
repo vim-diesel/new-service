@@ -16,7 +16,6 @@ var orderByFields = map[string]struct{}{
 	user.OrderByID:      {},
 	user.OrderByName:    {},
 	user.OrderByEmail:   {},
-	user.OrderByRoles:   {},
 	user.OrderByEnabled: {},
 }
 

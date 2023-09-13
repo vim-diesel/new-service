@@ -12,7 +12,7 @@ import (
 // QueryFilter holds the available fields a query can be filtered on.
 type QueryFilter struct {
 	ID               *uuid.UUID    `validate:"omitempty"`
-	Name             *string       `validate:"omitempty,min=3"`
+	FullName         *string       `validate:"omitempty,min=3"`
 	Email            *mail.Address `validate:"omitempty"`
 	StartCreatedDate *time.Time    `validate:"omitempty"`
 	EndCreatedDate   *time.Time    `validate:"omitempty"`
@@ -32,8 +32,8 @@ func (qf *QueryFilter) WithUserID(userID uuid.UUID) {
 }
 
 // WithName sets the Name field of the QueryFilter value.
-func (qf *QueryFilter) WithName(name string) {
-	qf.Name = &name
+func (qf *QueryFilter) WithName(fullName string) {
+	qf.FullName = &fullName
 }
 
 // WithEmail sets the Email field of the QueryFilter value.

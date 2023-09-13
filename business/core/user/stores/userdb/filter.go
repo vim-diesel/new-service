@@ -16,9 +16,9 @@ func (s *Store) applyFilter(filter user.QueryFilter, data map[string]interface{}
 		wc = append(wc, "user_id = :user_id")
 	}
 
-	if filter.Name != nil {
-		data["name"] = fmt.Sprintf("%%%s%%", *filter.Name)
-		wc = append(wc, "name LIKE :name")
+	if filter.FullName != nil {
+		data["full_name"] = fmt.Sprintf("%%%s%%", *filter.FullName)
+		wc = append(wc, "name LIKE :full_name")
 	}
 
 	if filter.Email != nil {

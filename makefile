@@ -18,10 +18,10 @@ test-endpoint:
 	curl -il https://new-service.fly.dev/test
 
 query-local:
-	@curl -s "http://localhost:3000/users?page=1&rows=2&orderBy=name,ASC" | jq
+	@curl -s "http://localhost:3000/users?page=1&rows=2&orderBy=fullname,ASC" | jq
 
 query:
-	@curl -s "https://new-service.fly.dev/users?page=1&rows=2&orderBy=name,ASC" | jq
+	@curl -s "https://new-service.fly.dev/users?page=1&rows=2&orderBy=fullname,ASC" | jq
 
 run-admin:
 	go run app/tooling/admin/main.go

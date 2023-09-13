@@ -38,9 +38,9 @@ func NewStore(log *slog.Logger, db *sqlx.DB) *Store {
 func (s *Store) Create(ctx context.Context, usr user.User) error {
 	const q = `
 	INSERT INTO users
-		(user_id, name, email, password_hash, roles, enabled, department, date_created, date_updated)
+		(user_id, full_name, first_name, last_name, email, enabled, created_at)
 	VALUES
-		(:user_id, :name, :email, :password_hash, :roles, :enabled, :department, :date_created, :date_updated)`
+		(:user_id, :full_name, :first_name, :last_name, :email, :enabled, :created_at)`
 
 	if err := database.NamedExecContext(ctx, s.log, s.db, q, toDBUser(usr)); err != nil {
 		if errors.Is(err, database.ErrDBDuplicatedEntry) {
@@ -58,12 +58,10 @@ func (s *Store) Update(ctx context.Context, usr user.User) error {
 	UPDATE
 		users
 	SET 
-		"name" = :name,
+		"full_name" = :full_name,
+		"first_name" = :first_name,
+		"last_name" = :last_name,
 		"email" = :email,
-		"roles" = :roles,
-		"password_hash" = :password_hash,
-		"department" = :department,
-		"date_updated" = :date_updated
 	WHERE
 		user_id = :user_id`
 
@@ -82,7 +80,7 @@ func (s *Store) Delete(ctx context.Context, usr user.User) error {
 	data := struct {
 		UserID string `db:"user_id"`
 	}{
-		UserID: usr.ID.String(),
+		UserID: usr.ID,
 	}
 
 	const q = `
