@@ -38,7 +38,6 @@ type Config struct {
 // set of user claims and recreate the claims by parsing the token.
 type GoogAuth struct {
 	log      *slog.Logger
-	method   jwt.SigningMethod
 	parser   *jwt.Parser
 	audience string
 }
@@ -47,7 +46,6 @@ type GoogAuth struct {
 func New(cfg Config) (*GoogAuth, error) {
 	a := GoogAuth{
 		log:      cfg.Log,
-		method:   jwt.GetSigningMethod(jwt.SigningMethodRS256.Name),
 		parser:   jwt.NewParser(jwt.WithValidMethods([]string{jwt.SigningMethodRS256.Name})),
 		audience: cfg.Audience,
 	}

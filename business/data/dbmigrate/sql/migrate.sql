@@ -1,30 +1,29 @@
 -- Version: 1.01
 -- Description: Create table users
-CREATE TABLE users (
-	user_id       UUID        NOT NULL,
-	name          TEXT        NOT NULL,
-	email         TEXT UNIQUE NOT NULL,
-	roles         TEXT[]      NOT NULL,
-	password_hash TEXT        NOT NULL,
-    department    TEXT        NULL,
-    enabled       BOOLEAN     NOT NULL,
-	date_created  TIMESTAMP   NOT NULL,
-	date_updated  TIMESTAMP   NOT NULL,
-	PRIMARY KEY (user_id)
+CREATE TABLE "users" (
+  "user_id" text PRIMARY KEY,
+  "full_name" text,
+  "first_name" text,
+  "last_name" text,
+  "email" text UNIQUE,
+  "enabled" boolean,
+  "created_at" timestamp
 );
 
 -- Version: 1.02
 -- Description: Create table products
-CREATE TABLE products (
-	product_id   UUID           NOT NULL,
-    user_id      UUID           NOT NULL,
-	name         TEXT           NOT NULL,
-	cost         NUMERIC(10, 2) NOT NULL,
-	quantity     INT            NOT NULL,
-	date_created TIMESTAMP      NOT NULL,
-	date_updated TIMESTAMP      NOT NULL,
+CREATE TABLE "retreats" (
+  "retreat_id" uuid PRIMARY KEY,
+  "title" text,
+  "body" text,
+  "user_id" text,
+  "status" text,
+  "cost" decimal(10,2),
+  "open_spots" integer,
+  "start_date" date,
+  "end_date" date,
+  "created_at" timestamp,
 
-	PRIMARY KEY (product_id),
 	FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
@@ -33,12 +32,11 @@ CREATE TABLE products (
 CREATE OR REPLACE VIEW user_summary AS
 SELECT
     u.user_id   AS user_id,
-	u.name      AS user_name,
-    COUNT(p.*)  AS total_count,
-    SUM(p.cost) AS total_cost
+	u.full_name      AS user_name,
+    COUNT(r.*)  AS total_count
 FROM
     users AS u
 JOIN
-    products AS p ON p.user_id = u.user_id
+    retreats AS r ON r.user_id = u.user_id
 GROUP BY
     u.user_id

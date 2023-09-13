@@ -1,4 +1,28 @@
-INSERT INTO users (user_id, name, email, roles, password_hash, department, enabled, date_created, date_updated) VALUES
-	('5cf37266-3473-4006-984f-9325122678b7', 'Admin Gopher', 'admin@example.com', '{ADMIN,USER}', '$2a$10$GAoWilm7dJBKx8JAV0JASOTo0P/EmQVDV3Nhnc7WWXbUF4v1g5byi', NULL, true, '2019-03-24 00:00:00', '2019-03-24 00:00:00'),
-	('45b5fbd3-755f-4379-8f07-a58d4a30fa2f', 'User Gopher', 'user@example.com', '{USER}', '2a$10$f03pZLikjsmVEuw.D..kL.l2H/1z6RpjMOu/ySCp5.p1IfG3tE1aS', NULL, true, '2019-03-24 00:00:00', '2019-03-24 00:00:00')
+INSERT INTO users (user_id, full_name, first_name, last_name, email, enabled, created_at) VALUES
+	('user_2V0HcZBFvnRXplo1ElzNIceGpZU', 'Admin Gopher', 'Admin', 'Gopher', 'admin+clerk_test@example.com', true, '2023-09-13 14:25:00')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO retreats (
+    retreat_id,
+    title,
+    body,
+    user_id,
+    status,
+    cost,
+    open_spots,
+    start_date,
+    end_date,
+    created_at
+) VALUES (
+    '6a88a612-5244-11ee-be56-0242ac120002', -- Replace with a UUID for the retreat
+    'Dummy Retreat',         -- Replace with the title of the retreat
+    'This is a dummy retreat for testing.', -- Replace with the body/description
+    'user_2V0HcZBFvnRXplo1ElzNIceGpZU', -- The user_id of the Admin Gopher
+    'Pending',               -- Replace with the status of the retreat
+    1000.00,                   -- Replace with the cost of the retreat
+    10,                       -- Replace with the number of open spots
+    '2023-09-20',             -- Replace with the start date of the retreat
+    '2023-09-25',             -- Replace with the end date of the retreat
+    NOW()                    -- Use the current timestamp for created_at
+)
 ON CONFLICT DO NOTHING;

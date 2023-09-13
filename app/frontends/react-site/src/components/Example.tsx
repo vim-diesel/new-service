@@ -15,7 +15,7 @@ export default function Example() {
 
   // In case the user signs out while on the page.
   if (!isLoaded || !userId) {
-    return <h4>Loading...</h4>;
+    return <h4>You are signed out...</h4>;
   }
 
   getToken().then((token) => {

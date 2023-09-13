@@ -8,8 +8,9 @@ import {
   SignedOut,
   RedirectToSignIn,
 } from '@clerk/clerk-react';
-import Example from './components/example';
+import Example from './components/Example';
 import Home from './components/pages/Home';
+
 
 if (!import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY) {
   throw new Error('Missing Publishable Key');
