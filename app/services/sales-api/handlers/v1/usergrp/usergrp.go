@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/vim-diesel/new-service/business/core/user"
+	"github.com/vim-diesel/new-service/business/web/clerkauth"
 	v1 "github.com/vim-diesel/new-service/business/web/v1"
 	"github.com/vim-diesel/new-service/business/web/v1/paging"
 	"github.com/vim-diesel/new-service/foundation/web"
@@ -55,7 +56,7 @@ func (h *Handlers) Update(ctx context.Context, w http.ResponseWriter, r *http.Re
 		return err
 	}
 
-	userID := auth.GetUserID(ctx)
+	userID := clerkauth.GetUserID(ctx)
 
 	usr, err := h.user.QueryByID(ctx, userID)
 	if err != nil {

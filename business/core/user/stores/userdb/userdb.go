@@ -12,7 +12,6 @@ import (
 
 	"log/slog"
 
-	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/vim-diesel/new-service/business/core/user"
 	"github.com/vim-diesel/new-service/business/data/order"
@@ -152,11 +151,11 @@ func (s *Store) Count(ctx context.Context, filter user.QueryFilter) (int, error)
 }
 
 // QueryByID gets the specified user from the database.
-func (s *Store) QueryByID(ctx context.Context, userID uuid.UUID) (user.User, error) {
+func (s *Store) QueryByID(ctx context.Context, userID string) (user.User, error) {
 	data := struct {
 		ID string `db:"user_id"`
 	}{
-		ID: userID.String(),
+		ID: userID,
 	}
 
 	const q = `
@@ -179,10 +178,10 @@ func (s *Store) QueryByID(ctx context.Context, userID uuid.UUID) (user.User, err
 }
 
 // QueryByIDs gets the specified users from the database.
-func (s *Store) QueryByIDs(ctx context.Context, userIDs []uuid.UUID) ([]user.User, error) {
+func (s *Store) QueryByIDs(ctx context.Context, userIDs []string) ([]user.User, error) {
 	ids := make([]string, len(userIDs))
 	for i, userID := range userIDs {
-		ids[i] = userID.String()
+		ids[i] = userID
 	}
 
 	data := struct {

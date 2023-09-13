@@ -9,6 +9,7 @@ import (
 	"log/slog"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -59,13 +60,13 @@ func (a *ClerkAuth) ValidateClerkJWT(ctx context.Context, tokenString string) (C
 		func(token *jwt.Token) (interface{}, error) {
 			key, err := getClerkPubKey()
 			if err != nil {
-				return nil, err
+				return nil, fmt.Errorf("getting public key: %w", err)
 			}
 			return key, nil
 		},
 	)
 	if err != nil {
-		return ClerkClaims{}, err
+		return ClerkClaims{}, fmt.Errorf("parsing JWT: %w", err)
 	}
 
 	claims, ok := token.Claims.(*ClerkClaims)
@@ -79,6 +80,10 @@ func (a *ClerkAuth) ValidateClerkJWT(ctx context.Context, tokenString string) (C
 
 	if claims.AuthorizedParty != "http://localhost:5173" && claims.AuthorizedParty != "https://new-service.vercel.app" {
 		return ClerkClaims{}, errors.New("azp is invalid")
+	}
+
+	if claims.ExpiresAt < time.Now().UTC().Unix() {
+		return ClerkClaims{}, errors.New("JWT is expired")
 	}
 
 	return *claims, nil

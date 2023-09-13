@@ -10,7 +10,6 @@ import (
 	"net/mail"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/vim-diesel/new-service/business/data/order"
 )
 
@@ -29,8 +28,8 @@ type Storer interface {
 	Delete(ctx context.Context, usr User) error
 	Query(ctx context.Context, filter QueryFilter, orderBy order.By, pageNumber int, rowsPerPage int) ([]User, error)
 	Count(ctx context.Context, filter QueryFilter) (int, error)
-	QueryByID(ctx context.Context, userID uuid.UUID) (User, error)
-	QueryByIDs(ctx context.Context, userID []uuid.UUID) ([]User, error)
+	QueryByID(ctx context.Context, userID string) (User, error)
+	QueryByIDs(ctx context.Context, userID []string) ([]User, error)
 	QueryByEmail(ctx context.Context, email mail.Address) (User, error)
 }
 
@@ -118,7 +117,7 @@ func (c *Core) Count(ctx context.Context, filter QueryFilter) (int, error) {
 }
 
 // QueryByID gets the specified user from the database.
-func (c *Core) QueryByID(ctx context.Context, userID uuid.UUID) (User, error) {
+func (c *Core) QueryByID(ctx context.Context, userID string) (User, error) {
 	user, err := c.storer.QueryByID(ctx, userID)
 	if err != nil {
 		return User{}, fmt.Errorf("query: userID[%s]: %w", userID, err)
@@ -128,7 +127,7 @@ func (c *Core) QueryByID(ctx context.Context, userID uuid.UUID) (User, error) {
 }
 
 // QueryByIDs gets the specified user from the database.
-func (c *Core) QueryByIDs(ctx context.Context, userIDs []uuid.UUID) ([]User, error) {
+func (c *Core) QueryByIDs(ctx context.Context, userIDs []string) ([]User, error) {
 	user, err := c.storer.QueryByIDs(ctx, userIDs)
 	if err != nil {
 		return nil, fmt.Errorf("query: userIDs[%s]: %w", userIDs, err)
