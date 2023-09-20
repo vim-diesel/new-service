@@ -82,25 +82,28 @@ func (h *Handlers) Update(ctx context.Context, w http.ResponseWriter, r *http.Re
 }
 
 // Delete removes a user from the system.
-// func (h *Handlers) Delete(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
-// 	userID := auth.GetUserID(ctx)
+func (h *Handlers) Delete(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
+	userID := clerkauth.GetUserID(ctx)
+	if userID == "" {
+		return fmt.Errorf("user id is empty")
+	}
 
-// 	usr, err := h.user.QueryByID(ctx, userID)
-// 	if err != nil {
-// 		switch {
-// 		case errors.Is(err, user.ErrNotFound):
-// 			return web.Respond(ctx, w, nil, http.StatusNoContent)
-// 		default:
-// 			return fmt.Errorf("querybyid: userID[%s]: %w", userID, err)
-// 		}
-// 	}
+	usr, err := h.user.QueryByID(ctx, userID)
+	if err != nil {
+		switch {
+		case errors.Is(err, user.ErrNotFound):
+			return web.Respond(ctx, w, nil, http.StatusNoContent)
+		default:
+			return fmt.Errorf("querybyid: userID[%s]: %w", userID, err)
+		}
+	}
 
-// 	if err := h.user.Delete(ctx, usr); err != nil {
-// 		return fmt.Errorf("delete: userID[%s]: %w", userID, err)
-// 	}
+	if err := h.user.Delete(ctx, usr); err != nil {
+		return fmt.Errorf("delete: userID[%s]: %w", userID, err)
+	}
 
-// 	return web.Respond(ctx, w, nil, http.StatusNoContent)
-// }
+	return web.Respond(ctx, w, nil, http.StatusNoContent)
+}
 
 // Query returns a list of users with paging.
 func (h *Handlers) Query(ctx context.Context, w http.ResponseWriter, r *http.Request) error {

@@ -26,10 +26,10 @@ type Config struct {
 
 // Routes binds all the version 1 routes.
 func Routes(app *web.App, cfg Config) {
-	const version = "v1"
+	authen := mid.Authenticate(cfg.ClerkAuth)
 
 	app.Handle(http.MethodGet, "/test", testgrp.Test)
-	app.Handle(http.MethodGet, "/test/auth", testgrp.TestingAuth, mid.Authenticate(cfg.ClerkAuth))
+	app.Handle(http.MethodGet, "/test/auth", testgrp.TestingAuth, authen)
 
 	// =========================================================================
 
@@ -38,5 +38,6 @@ func Routes(app *web.App, cfg Config) {
 	ugh := usergrp.New(usrCore)
 
 	app.Handle(http.MethodGet, "/users", ugh.Query)
-	app.Handle(http.MethodPost, "/users/create", ugh.Create)
+	app.Handle(http.MethodPost, "/users/create", ugh.Create, authen)
+	app.Handle(http.MethodDelete, "/users/delete", ugh.Delete, authen)
 }

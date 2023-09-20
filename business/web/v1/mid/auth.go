@@ -17,6 +17,7 @@ func Authenticate(a *clerkauth.ClerkAuth) web.Middleware {
 			}
 
 			ctx = clerkauth.SetClaims(ctx, claims)
+			ctx = clerkauth.SetUserID(ctx, claims.Subject)
 			return handler(ctx, w, r)
 		}
 		return h
@@ -24,20 +25,16 @@ func Authenticate(a *clerkauth.ClerkAuth) web.Middleware {
 	return m
 }
 
-// Authorize validates that an authenticated user has at least one role from a
-// specified list. This method constructs the actual function that is used.
-// func Authorize(a *googauth.GoogAuth, rule string) web.Middleware {
+// Authorize validates that an authenticated user has claims
+// func Authorize(a *clerkauth.ClerkAuth) web.Middleware {
 // 	m := func(handler web.Handler) web.Handler {
 // 		h := func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
-// 			claims := auth.GetClaims(ctx)
+// 			claims := clerkauth.GetClaims(ctx)
 // 			if claims.Subject == "" {
-// 				return auth.NewAuthError("authorize: you are not authorized for that action, no claims")
+// 				return clerkauth.NewAuthError("authorize: you are not authorized for that action, no claims")
 // 			}
 
-// 			if err := a.Authorize(ctx, claims, rule); err != nil {
-// 				return auth.NewAuthError("authorize: you are not authorized for that action, claims[%v] rule[%v]: %s", claims.Roles, rule, err)
-// 			}
-
+// 			ctx = clerkauth.SetUserID(ctx, claims.Subject)
 // 			return handler(ctx, w, r)
 // 		}
 

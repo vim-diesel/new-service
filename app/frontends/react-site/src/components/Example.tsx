@@ -5,7 +5,16 @@ export default function Example() {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
 
   const handleClick = async () => {
-    const res = await fetch('https://new-service.fly.dev/test/auth', {
+    const res = await fetch('http://localhost:3000/test/auth', {
+      headers: { Authorization: `Bearer ${await getToken()}` },
+    })
+      .then((res) => res.json())
+      .catch((err) => console.log(err));
+    console.log(res);
+  };
+  const handleDeleteMe = async () => {
+    const res = await fetch(`http://localhost:3000/users/delete`, {
+      method: 'DELETE',
       headers: { Authorization: `Bearer ${await getToken()}` },
     })
       .then((res) => res.json())
@@ -31,6 +40,7 @@ export default function Example() {
         Get a Token
       </Button>
       <Button onClick={handleClick}>test query</Button>
+      <Button onClick={handleDeleteMe}>delete me</Button>
     </>
   );
 }
